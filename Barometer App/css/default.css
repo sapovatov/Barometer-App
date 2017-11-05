@@ -3,3 +3,562 @@
   touch-action: manipulation;
   */
 }
+/*--------------------------svg_styles----------------------------------*/
+.st0 {
+    fill: #E6E6E6;
+}
+.st1 {
+    opacity: 0.51;
+    fill: none;
+}
+.st2 {
+    font-family: 'DorovarFLF-Carolus';
+}
+.st3 {
+    font-size: 13.6913px;
+}
+.st4 {
+    font-size: 13.6914px;
+}
+.st5 {
+    font-size: 13.6912px;
+}
+.st6 {
+    fill: url(#Hour_ring_1_);
+}
+.st7 {
+    font-size: 16.8312px;
+}
+.st8 {
+    font-size: 16.8311px;
+}
+.st9 {
+    fill: url(#Month_ring_1_);
+}
+.st10 {
+    font-family: 'SegoeUI-Semibold';
+}
+.st11 {
+    font-size: 11.8873px;
+}
+.st12 {
+    font-size: 11.8874px;
+}
+.st13 {
+    fill: url(#SVGID_1_);
+}
+.st14 {
+    font-size: 16.8531px;
+}
+.st15 {
+    font-size: 16.853px;
+}
+.st16 {
+    font-size: 16.8529px;
+}
+.st17 {
+    font-size: 16.8528px;
+}
+.st18 {
+    fill: url(#SVGID_2_);
+}
+.st19 {
+    fill: url(#SVGID_3_);
+}
+.st20 {
+    enable-background: new;
+}
+.st21 {
+    clip-path: url(#SVGID_5_);
+    enable-background: new;
+}
+.st22 {
+    fill: #BABABA;
+}
+.st23 {
+    fill: #B9B8B8;
+}
+.st24 {
+    fill: #B7B6B6;
+}
+.st25 {
+    fill: #B5B4B4;
+}
+.st26 {
+    fill: #B3B2B2;
+}
+.st27 {
+    fill: #B1B0B0;
+}
+.st28 {
+    fill: #AFAEAE;
+}
+.st29 {
+    fill: #ADACAC;
+}
+.st30 {
+    fill: #ABAAAA;
+}
+.st31 {
+    fill: #A8A8A8;
+}
+.st32 {
+    fill: #A6A5A5;
+}
+.st33 {
+    fill: #A4A3A3;
+}
+.st34 {
+    fill: #A1A1A1;
+}
+.st35 {
+    fill: #9F9E9E;
+}
+.st36 {
+    fill: #9C9B9B;
+}
+.st37 {
+    fill: #999999;
+}
+.st38 {
+    fill: #969696;
+}
+.st39 {
+    fill: #939393;
+}
+.st40 {
+    fill: #908F8F;
+}
+.st41 {
+    fill: #8D8C8C;
+}
+.st42 {
+    fill: #898888;
+}
+.st43 {
+    fill: #858484;
+}
+.st44 {
+    fill: #818080;
+}
+.st45 {
+    fill: #7C7B7B;
+}
+.st46 {
+    fill: #767575;
+}
+.st47 {
+    fill: #6E6E6E;
+}
+.st48 {
+    fill: #605F5F;
+}
+.st49 {
+    fill: #5A5959;
+}
+.st50 {
+    fill: #595858;
+}
+.st51 {
+    fill: #585757;
+}
+.st52 {
+    fill: #575656;
+}
+.st53 {
+    fill: #565555;
+}
+.st54 {
+    fill: #555454;
+}
+.st55 {
+    fill: #545353;
+}
+.st56 {
+    fill: #535353;
+}
+.st57 {
+    fill: #535252;
+}
+.st58 {
+    fill: #525151;
+}
+.st59 {
+    fill: #515050;
+}
+.st60 {
+    fill: #504F4F;
+}
+.st61 {
+    fill: #4F4F4F;
+}
+.st62 {
+    fill: #4F4E4E;
+}
+.st63 {
+    fill: #4E4D4D;
+}
+.st64 {
+    fill: #4D4C4C;
+}
+.st65 {
+    fill: #4C4C4C;
+}
+.st66 {
+    fill: #4C4B4B;
+}
+.st67 {
+    fill: #4B4B4B;
+}
+.st68 {
+    fill: #4B4A4A;
+}
+.st69 {
+    fill: #4A4949;
+}
+.st70 {
+    fill: #494848;
+}
+.st71 {
+    fill: #484848;
+}
+.st72 {
+    fill: #484747;
+}
+.st73 {
+    fill: #474747;
+}
+.st74 {
+    fill: #474646;
+}
+.st75 {
+    fill: #464545;
+}
+.st76 {
+    fill: #454545;
+}
+.st77 {
+    fill: #454444;
+}
+.st78 {
+    fill: #444444;
+}
+.st79 {
+    fill: #444343;
+}
+.st80 {
+    fill: #434343;
+}
+.st81 {
+    fill: #434242;
+}
+.st82 {
+    fill: #424141;
+}
+.st83 {
+    fill: #414141;
+}
+.st84 {
+    fill: #414040;
+}
+.st85 {
+    fill: #404040;
+}
+.st86 {
+    fill: #403F3F;
+}
+.st87 {
+    fill: #3F3F3F;
+}
+.st88 {
+    fill: #3F3E3E;
+}
+.st89 {
+    fill: #3E3D3D;
+}
+.st90 {
+    fill: #3D3D3D;
+}
+.st91 {
+    fill: #3D3C3C;
+}
+.st92 {
+    fill: #3C3C3C;
+}
+.st93 {
+    fill: #3C3B3B;
+}
+.st94 {
+    fill: #3B3B3B;
+}
+.st95 {
+    fill: #3A3A3A;
+}
+.st96 {
+    fill: #3A3939;
+}
+.st97 {
+    fill: #393939;
+}
+.st98 {
+    fill: #393838;
+}
+.st99 {
+    fill: #383838;
+}
+.st100 {
+    fill: #383737;
+}
+.st101 {
+    fill: #373737;
+}
+.st102 {
+    fill: #363636;
+}
+.st103 {
+    fill: #363535;
+}
+.st104 {
+    fill: #353535;
+}
+.st105 {
+    fill: #353434;
+}
+.st106 {
+    fill: #343434;
+}
+.st107 {
+    fill: #333333;
+}
+.st108 {
+    fill: #323232;
+}
+.st109 {
+    fill: #323131;
+}
+.st110 {
+    fill: #313131;
+}
+.st111 {
+    fill: #313030;
+}
+.st112 {
+    fill: #303030;
+}
+.st113 {
+    fill: #2F2F2F;
+}
+.st114 {
+    fill: #BCBCBC;
+}
+.st115 {
+    fill: #BEBEBE;
+}
+.st116 {
+    fill: #C0BFBF;
+}
+.st117 {
+    fill: #C2C1C1;
+}
+.st118 {
+    fill: #C3C3C3;
+}
+.st119 {
+    fill: #C5C5C5;
+}
+.st120 {
+    fill: #C7C6C6;
+}
+.st121 {
+    fill: #C8C8C8;
+}
+.st122 {
+    fill: #CAC9C9;
+}
+.st123 {
+    fill: #CBCBCB;
+}
+.st124 {
+    fill: #CDCDCD;
+}
+.st125 {
+    fill: #CECECE;
+}
+.st126 {
+    fill: #D0D0D0;
+}
+.st127 {
+    fill: #D1D1D1;
+}
+.st128 {
+    fill: #D3D3D3;
+}
+.st129 {
+    fill: #D4D4D4;
+}
+.st130 {
+    fill: #D6D5D5;
+}
+.st131 {
+    fill: #D7D7D7;
+}
+.st132 {
+    fill: #D9D8D8;
+}
+.st133 {
+    fill: #DADADA;
+}
+.st134 {
+    fill: #DBDBDB;
+}
+.st135 {
+    fill: #DDDCDC;
+}
+.st136 {
+    fill: #DEDEDE;
+}
+.st137 {
+    fill: #DFDFDF;
+}
+.st138 {
+    fill: #E1E0E0;
+}
+.st139 {
+    fill: #E2E2E2;
+}
+.st140 {
+    fill: #E3E3E3;
+}
+.st141 {
+    fill: #E5E4E4;
+}
+.st142 {
+    fill: #E7E7E7;
+}
+.st143 {
+    fill: #E8E8E8;
+}
+.st144 {
+    clip-path: url(#SVGID_7_);
+    enable-background: new;
+}
+.st145 {
+    clip-path: url(#SVGID_9_);
+    enable-background: new;
+}
+.st146 {
+    clip-path: url(#SVGID_11_);
+    enable-background: new;
+}
+.st147 {
+    fill: url(#SVGID_12_);
+}
+.st148 {
+    fill: none;
+}
+.st149 {
+    fill: none;
+    stroke: #000000;
+    stroke-width: 0.25;
+    stroke-miterlimit: 10;
+}
+.st150 {
+    opacity: 0.75;
+}
+.st151 {
+    font-family: 'SegoeUI';
+}
+.st152 {
+    font-size: 10px;
+}
+.st153 {
+    filter: url(#Adobe_OpacityMaskFilter);
+}
+.st154 {
+    fill: url(#SVGID_14_);
+}
+.st155 {
+    mask: url(#SVGID_13_);
+    fill: url(#SVGID_15_);
+}
+.st156 {
+    clip-path: url(#SVGID_17_);
+    enable-background: new;
+}
+.st157 {
+    fill: #A5A5A5;
+}
+.st158 {
+    fill: #9E9E9E;
+}
+.st159 {
+    fill: #989898;
+}
+.st160 {
+    fill: #919191;
+}
+.st161 {
+    fill: #8B8B8B;
+}
+.st162 {
+    fill: #848484;
+}
+.st163 {
+    fill: #7E7E7E;
+}
+.st164 {
+    fill: #777777;
+}
+.st165 {
+    fill: #717171;
+}
+.st166 {
+    fill: #6A6A6A;
+}
+.st167 {
+    fill: #646464;
+}
+.st168 {
+    fill: #5D5D5D;
+}
+.st169 {
+    fill: #565656;
+}
+.st170 {
+    fill: #505050;
+}
+.st171 {
+    fill: #494949;
+}
+.st172 {
+    fill: #ABABAB;
+}
+.st173 {
+    fill: #B2B2B2;
+}
+.st174 {
+    fill: #B8B8B8;
+}
+.st175 {
+    fill: #BFBFBF;
+}
+.st176 {
+    fill: #CCCCCC;
+}
+.st177 {
+    fill: #D5D5D5;
+}
+.st178 {
+    fill: #525252;
+}
+.st179 {
+    fill: url(#SVGID_18_);
+}
+/*---------------------main_style------------------------------*/
+#Main, #Statistic, #Days, #Months, #Hours, #Minutes, #Ruler_bar, #Ruler_mm{
+
+   
+}
+
+
+
