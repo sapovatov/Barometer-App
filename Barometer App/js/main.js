@@ -1,9 +1,24 @@
 ﻿// Your code here!
 jQuery(document).ready(function () {
     var main_arrow = jQuery("#Main");
-    TweenLite.to(main_arrow, 1, {
-        attr: {
-            transform:"rotate(60, 250 250)"
+
+
+    function rotation(element, r_value, speed, delay, ease_value) {
+
+        if (ease_value == 1) {
+            TweenLite.to(element, (speed) ? speed : 1, {
+                attr: { transform: "rotate(" + r_value + ", 250 250)" }, delay: delay, ease: Back.easeOut.config(1), y: -10
+            });
         }
-    });
+        else if (ease_value == 2) {
+            TweenLite.to(element, (speed) ? speed : 1, {
+                attr: { transform: "rotate(" + r_value + ", 250 250)" }, delay: delay, ease: Power3.easeInOut, y: -500
+            });
+        }
+        else {
+            TweenLite.to(element, (speed) ? speed : 1, {
+                attr: { transform: "rotate(" + r_value + ", 250 250)" }, delay: delay
+            });
+        }
+    };
 });
