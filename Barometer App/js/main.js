@@ -21,4 +21,9 @@ jQuery(document).ready(function () {
             });
         }
     };
+
+    jQuery("#Button").bind("tap", function (e) {
+        console.log("Tap event");
+    });
+
 });
