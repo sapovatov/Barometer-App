@@ -260,6 +260,7 @@
     <Content Include="Content\images\icons-svg\video-black.svg" />
     <Content Include="Content\images\icons-svg\video-white.svg" />
     <Content Include="Content\jquery.mobile-1.4.5.css" />
+    <Content Include="css\fonts\DOROVARF.TTF" />
     <Content Include="css\jquery.mobile-1.4.5.min.css" />
     <Content Include="Content\jquery.mobile.external-png-1.4.5.css" />
     <Content Include="Content\jquery.mobile.external-png-1.4.5.min.css" />

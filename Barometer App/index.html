@@ -9,6 +9,23 @@
 <body>
     <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
          viewBox="0 0 500 500" style="enable-background:new 0 0 500 500;" xml:space="preserve">
+        <defs>
+            <filter id="innerGlow" height="300%" width="300%" x="-75%" y="-75%">
+		        <!-- Thicken out the original shape -->
+                <feMorphology operator="dilate" radius="0" in="SourceAlpha" result="thicken" />
+		        <!-- Use a gaussian blur to create the soft blurriness of the glow -->
+                <feGaussianBlur in="thicken" stdDeviation="0" result="blurred" />
+		        <!-- Change the colour -->
+                <feFlood flood-color="#0000ff" flood-opacity="0" result="glowColor" />
+		        <!-- Color in the glows -->
+                <feComposite in="glowColor" in2="blurred" operator="in" result="softGlow_colored" />
+		        <!--	Layer the effects together -->
+                <feMerge>
+                    <feMergeNode in="SourceGraphic" />
+                    <feMergeNode in="softGlow_colored" />
+		        </feMerge>
+	        </filter>
+        </defs>
 <g id="Body">
     <path class="st0" d="M261.3,396.4v51.4c0,6.7-5,12.2-11,12.2s-11-5.5-11-12.2v-51.4c0-6.7,5-12.2,11-12.2c3,0,5.8,1.4,7.8,3.6
 		C260,390,261.3,393.1,261.3,396.4z" />
@@ -225,7 +242,7 @@
     <stop offset="1" style="stop-color:#FFFFFF" />
 
 	</radialGradient>
-    <path class="st58" d="M259.2,386.5c-2.3-2.3-5.5-3.7-9-3.7c-7,0-12.8,5.7-12.8,12.7v53.8c0,7,5.7,12.7,12.8,12.7
+    <path class="st58" filter="url(#innerGlow)" d="M259.2,386.5c-2.3-2.3-5.5-3.7-9-3.7c-7,0-12.8,5.7-12.8,12.7v53.8c0,7,5.7,12.7,12.8,12.7
 		c7,0,12.8-5.7,12.8-12.7v-53.8C263,392,261.5,388.8,259.2,386.5z M261.2,447.8c0,6.7-5,12.2-11,12.2c-6,0-11-5.5-11-12.2v-51.4
 		c0-6.7,5-12.2,11-12.2c3,0,5.8,1.4,7.8,3.6c2,2.2,3.2,5.2,3.2,8.6V447.8z" />
 
