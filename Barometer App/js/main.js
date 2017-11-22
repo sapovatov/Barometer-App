@@ -1,5 +1,8 @@
 ﻿// Your code here!
 jQuery(document).ready(function () {
+    var light_color = "#00ffaa";
+    jQuery("#innerGlow > feFlood").attr("flood-color", light_color);
+    jQuery("#Statistic").css("fill", light_color);
     var main_arrow = jQuery("#Main");
 
     function rotation(element, r_value, speed, delay, ease_value) {
@@ -54,9 +57,9 @@ jQuery(document).ready(function () {
                     localStorage.setItem("mark_hours", mark_hours);
                     localStorage.setItem("mark_minutes", mark_minutes);
 
-                    TweenLite.to(jQuery("#innerGlow > feFlood"), 2, { attr: { "flood-opacity": 1 } });
-                    TweenLite.to(jQuery("#innerGlow > feMorphology"), 1, { attr: { radius: 0.3 } });
-                    TweenLite.to(jQuery("#innerGlow > feGaussianBlur"), 2, { attr: { stdDeviation: 2 } });
+                    TweenLite.to(jQuery("#innerGlow > feFlood"), 2, { attr: { "flood-opacity": 0.5 } });
+                    TweenLite.to(jQuery("#innerGlow > feMorphology"), 1, { attr: { radius: 4 } });
+                    TweenLite.to(jQuery("#innerGlow > feGaussianBlur"), 2, { attr: { stdDeviation: 4 } });
 
 
                     rotation(jQuery("#Days"), -(mark_day * 11.25), 5, 0, 2);
@@ -104,14 +107,14 @@ jQuery(document).ready(function () {
                     var storage_hour = localStorage.getItem("mark_hours");
                     var storage_minute = localStorage.getItem("mark_minutes");
 
-                    TweenLite.to(jQuery("#innerGlow > feFlood"), 1, { attr: { "flood-opacity": 1 } });
-                    TweenLite.to(jQuery("#innerGlow > feMorphology"), 1, { attr: { radius: 0.3 } });
-                    TweenLite.to(jQuery("#innerGlow > feGaussianBlur"), 1, { attr: { stdDeviation: 2 } });
+                    TweenLite.to(jQuery("#innerGlow > feFlood"), 0, { attr: { "flood-opacity": 0.5 } });
+                    TweenLite.to(jQuery("#innerGlow > feMorphology"), 0, { attr: { radius: 4 } });
+                    TweenLite.to(jQuery("#innerGlow > feGaussianBlur"), 0, { attr: { stdDeviation: 4 } });
 
                     rotation(jQuery("#Days"), -(storage_day * 11.25), 1, 0, 2);
-                    rotation(jQuery("#Months"), -(storage_month * 27.6923), 1, 0, 2);
-                    rotation(jQuery("#Hours"), 14.4 - (storage_hour * 14.4), 1, 0, 2);
-                    rotation(jQuery("#Minutes"), 5.9016 - (storage_minute * 5.9016), 1, 0, 2);
+                    rotation(jQuery("#Months"), -27.6923-(storage_month * 27.6923), 1, 0, 2);
+                    rotation(jQuery("#Hours"), -14.4 - (storage_hour * 14.4), 1, 0, 2);
+                    rotation(jQuery("#Minutes"), -5.9016 - (storage_minute * 5.9016), 1, 0, 2);
                 }
                 else {
                     console.log("Storage have no data!!!");
