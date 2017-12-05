@@ -2,21 +2,90 @@
     /* Uncomment this to enable scrolling and zooming
   touch-action: manipulation;
   */
+    height: 100vh;
+    width: 100vw;
+    overflow-y:hidden;
     -moz-user-select: none;
     -webkit-user-select: none;
     -ms-user-select: none;
     user-select: none;
     background: #000 !important;
 }
-
-
 .ui-page {
     background: #000 !important;
 }
+#barometer{
+    position: relative;
+    width: 500px;
+    height: 500px;
+    top: 50vh;
+    left: 50vw;
+    transform: translate(-50%, -50%);
+   
+}
+#barometer_blick, #barometer_body, #minutes, #hours, #months, #days {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+#barometer_body {
+    background: url("../images/Barometer_body.png") no-repeat;
+}
+#barometer_blick {
+    background: url("../images/Barometer_lighting.png") no-repeat;
+    background-position: 18% 18%;
+}
+#minutes {
+    background: url("../images/Barometer_minutes.png") no-repeat;
+    background-position: center center;
+    z-index: -4;
+}
+#hours {
+    background: url("../images/Barometer_hours.png") no-repeat;
+    background-position: center center;
+    z-index: -3;
+}
+#months {
+    background: url("../images/Barometer_months.png") no-repeat;
+    background-position: center center;
+    z-index: -2;
+}
+#days {
+    background: url("../images/Barometer_days.png") no-repeat;
+    background-position: center center;
+    z-index: -1;
+}
+#arrows {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+#main_arrow {
+    width: 100%;
+    height: 100%;
+    background: url("../images/Barometer-arrow.png") no-repeat;
+    background-position: 50% 35%;
+}
+#button {
+    position: absolute;
+    width: 42px;
+    height: 42px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: url("../images/Barometer_button.png") no-repeat;
+    background-position: center center;
+}
 
 @media screen and (max-width: 480px) {
-    
-}
+    #barometer {
+        position: relative;
+        width: 98vw;
+        height: 98vh;
+    }
 
 
 

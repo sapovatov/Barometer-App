@@ -2,13 +2,8 @@
 
 jQuery(document).ready(function () {
     var window_height = jQuery(window).height();
-    jQuery("svg").css({ "transform": "translate(-50%, " + (window_height - jQuery('svg').height()) / 2 + "px" });
-
-    jQuery("svg").animate({opacity:1}, 250);
-
+   
     var light_color = "#00ffaa";
-    jQuery("#innerGlow > feFlood").attr("flood-color", light_color);
-    jQuery("#Statistic").css("fill", light_color);
     var main_arrow = jQuery("#Main");
 
 
