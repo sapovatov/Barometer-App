@@ -2,9 +2,29 @@
 
 jQuery(document).ready(function () {
     var window_height = jQuery(window).height();
-   
+
     var light_color = "#00ffaa";
     var main_arrow = jQuery("#Main");
+
+
+    //positioning
+    var window_width = jQuery(window).width();
+    if (window_width < 500) {
+        var width_delta = 500 - window_width;
+        var new_width = (500 - width_delta) - (((500 - width_delta) * 2) / (100));
+        var coef = ((100 * new_width) / 500) / 100;
+        reposition(coef);
+    }
+
+    function reposition(coeficient) {
+        jQuery("#minutes").css({ "width": jQuery("#minutes").width() * coeficient + "px", "height": jQuery("#minutes").height() * coeficient + "px" });
+        jQuery("#hours").css({ "width": jQuery("#hours").width() * coeficient + "px", "height": jQuery("#hours").height() * coeficient + "px" });
+        jQuery("#months").css({ "width": jQuery("#months").width() * coeficient + "px", "height": jQuery("#months").height() * coeficient + "px" });
+        jQuery("#days").css({ "width": jQuery("#days").width() * coeficient + "px", "height": jQuery("#days").height() * coeficient + "px" });
+        jQuery("#main_arrow").css({ "width": jQuery("#main_arrow").width() * coeficient + "px", "height": jQuery("#main_arrow").height() * coeficient + "px" });
+        //jQuery("#barometer_blick").css({ "width": jQuery("#barometer_blick").width() * coeficient + "px", "height": jQuery("#barometer_blick").height() * coeficient + "px" });
+        jQuery("#button").css({ "width": jQuery("#button").width() * coeficient + "px", "height": jQuery("#button").height() * coeficient + "px" });
+    };
 
 
     //barometer part

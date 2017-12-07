@@ -23,7 +23,7 @@
     transform: translate(-50%, -50%);
    
 }
-#barometer_blick, #barometer_body, #minutes, #hours, #months, #days {
+#barometer_blick, #barometer_body, #minutes, #hours, #months, #days, #main_arrow {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -33,29 +33,43 @@
 }
 #barometer_body {
     background: url("../images/Barometer_body.png") no-repeat;
+    background-position: center center;
+    background-size: 100% 100%;
 }
 #barometer_blick {
     background: url("../images/Barometer_lighting.png") no-repeat;
     background-position: 18% 18%;
 }
 #minutes {
+    width: 430px;
+    height: 430px;
     background: url("../images/Barometer_minutes.png") no-repeat;
     background-position: center center;
+    background-size: 100% 100%;
     z-index: -4;
 }
 #hours {
+    width: 386px;
+    height: 386px;
     background: url("../images/Barometer_hours.png") no-repeat;
     background-position: center center;
+    background-size: 100% 100%;
     z-index: -3;
 }
 #months {
+    width: 346px;
+    height: 346px;
     background: url("../images/Barometer_months.png") no-repeat;
     background-position: center center;
+    background-size: 100% 100%;
     z-index: -2;
 }
 #days {
+    width: 317px;
+    height: 317px;
     background: url("../images/Barometer_days.png") no-repeat;
     background-position: center center;
+    background-size: 100% 100%;
     z-index: -1;
 }
 #arrows {
@@ -64,9 +78,11 @@
     height: 100%;
 }
 #main_arrow {
-    width: 100%;
-    height: 100%;
+    width: 32px;
+    height: 317px;
+    top: 44%;
     background: url("../images/Barometer-arrow.png") no-repeat;
+    background-size: 100% 100%;
     background-position: 50% 35%;
 }
 #button {
@@ -77,15 +93,21 @@
     left: 50%;
     transform: translate(-50%, -50%);
     background: url("../images/Barometer_button.png") no-repeat;
+    background-size: 100% 100%;
     background-position: center center;
 }
 
 @media screen and (max-width: 480px) {
     #barometer {
         position: relative;
-        width: 98vw;
-        height: 98vh;
+        width: 98vW;
+        height: 98vW;
     }
 
+
+    #barometer_blick {
+        background-size: 70%;
+    }
+}
 
 
