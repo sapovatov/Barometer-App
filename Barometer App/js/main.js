@@ -22,7 +22,7 @@ jQuery(document).ready(function () {
         jQuery("#months").css({ "width": jQuery("#months").width() * coeficient + "px", "height": jQuery("#months").height() * coeficient + "px" });
         jQuery("#days").css({ "width": jQuery("#days").width() * coeficient + "px", "height": jQuery("#days").height() * coeficient + "px" });
         jQuery("#main_arrow").css({ "width": jQuery("#main_arrow").width() * coeficient + "px", "height": jQuery("#main_arrow").height() * coeficient + "px" });
-        //jQuery("#barometer_blick").css({ "width": jQuery("#barometer_blick").width() * coeficient + "px", "height": jQuery("#barometer_blick").height() * coeficient + "px" });
+        jQuery("#statistic_arrow").css({ "width": jQuery("#statistic_arrow").width() * coeficient + "px", "height": jQuery("#statistic_arrow").height() * coeficient + "px" });
         jQuery("#button").css({ "width": jQuery("#button").width() * coeficient + "px", "height": jQuery("#button").height() * coeficient + "px" });
     };
 
@@ -57,7 +57,7 @@ jQuery(document).ready(function () {
         var reading = e.reading;
         barometer_value = e.reading.stationPressureInHectopascals.toFixed(2);
 
-        rotation(jQuery("#Main"), ((barometer_value - 1010) * 2.43), 1, 0, 3);
+        rotation(jQuery("#main_arrow"), ((barometer_value - 1010) * 2.43), 1, 0, 3);
     }
 
     function rotation(element, r_value, speed, delay, ease_value) {
@@ -112,10 +112,6 @@ jQuery(document).ready(function () {
                     localStorage.setItem("mark_hours", mark_hours);
                     localStorage.setItem("mark_minutes", mark_minutes);
                     localStorage.setItem("mark_preasure", barometer_value);
-
-                    TweenLite.to(jQuery("#innerGlow > feFlood"), 5, { attr: { "flood-opacity": 0.5 } });
-                    TweenLite.to(jQuery("#innerGlow > feMorphology"), 4, { attr: { radius: 4 } });
-                    TweenLite.to(jQuery("#innerGlow > feGaussianBlur"), 5, { attr: { stdDeviation: 4 } });
 
                     rotation(jQuery("#Days"), -(mark_day * 11.25), 0, 5, 3);
                     rotation(jQuery("#Months"), -27.6923-(mark_month * 27.6923), 0, 5, 3);
