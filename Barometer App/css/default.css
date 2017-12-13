@@ -14,13 +14,15 @@
 .ui-page {
     background: #000 !important;
 }
+#main_page {
+    overflow: hidden;
+}
 #barometer{
-    position: relative;
+    position: absolute;
     width: 500px;
     height: 500px;
-    top: 50vh;
     left: 50vw;
-    transform: translate(-50%, -50%);
+    transform: translate(-50%, 0%);
    
 }
 #barometer_blick, #barometer_body, #minutes, #hours, #months, #days, #main_arrow, #statistic_arrow {
@@ -101,7 +103,7 @@
     position: absolute;
     width: 100%;
     height: 10%;
-    top: 97%;
+    top: 97.5%;
     border-top: 5px solid #000;
     border-radius: 50%;
 }
@@ -154,7 +156,6 @@
     }
 
     #main_arrow_tale {
-        border-top: 4px solid #000;
-        border-radius: 42%;
+        border-radius: 48%;
     }
 }
