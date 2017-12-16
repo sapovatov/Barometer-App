@@ -282,7 +282,6 @@
     <Content Include="images\Barometer_button.png" />
     <Content Include="images\Barometer_days.png" />
     <Content Include="images\Barometer_hours.png" />
-    <Content Include="images\Barometer_lighting.png" />
     <Content Include="images\Barometer_minutes.png" />
     <Content Include="images\Barometer_months.png" />
     <Content Include="images\LargeTile.scale-100.png" />

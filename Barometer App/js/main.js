@@ -1,9 +1,11 @@
 ﻿// Your code here!
 
 jQuery(document).ready(function () {
+
+
     var window_height = jQuery(window).height();
 
-    var light_color = "#00ffaa";
+    var light_color = "#0077ff";
     var main_arrow = jQuery("#Main");
 
     reposition(1);
@@ -55,33 +57,27 @@ jQuery(document).ready(function () {
     else {
         console.log("No barometer!");
     }
-
-
+    
     function onBarometerDataChanged(e) {
         var reading = e.reading;
         barometer_value = e.reading.stationPressureInHectopascals.toFixed(2);
 
-        rotation(jQuery("#main_arrow"), ((barometer_value - 1010) * 2.43), 1, 0, 3);
+        rotation(jQuery("#main_arrow"), ((barometer_value - 1010) * 2.43), 1, 1);
     }
 
-    function rotation(element, r_value, speed, delay, ease_value) {
+    function rotation(element, r_value, speed, type) {
 
-        if (ease_value == 1) {
-            TweenLite.to(element, (speed) ? speed : 1, {
-                attr: { transform: "rotate(" + r_value + " 250 250)" }, delay: delay, ease: Back.easeOut.config(1), y: -10
-            });
+        if (type == 1) {
+            jQuery(element).css({ "transform": "rotate(" + r_value + "deg) translate(-50%, -50%)", "transition": "transform cubic-bezier(0.175, 0.885, 0.32, 1.275) " + speed + "s" });
         }
-        else if (ease_value == 2) {
-            TweenLite.to(element, (speed) ? speed : 1, {
-                attr: { transform: "rotate(" + r_value + " 250 250)" }, delay: delay, ease: Power3.easeInOut, y: -500
-            });
+        else if (type == 2) {
+            jQuery(element).css({ "transform": "rotate(" + r_value + "deg) translate(-50%, -50%)", "transition": "all ease-out " + speed + "s" });
         }
         else {
-            TweenLite.to(element, (speed) ? speed : 0, {
-                attr: { transform: "rotate(" + r_value + " 250 250)" }, delay: delay
-            });
+            jQuery(element).css({ "transform": "rotate(" + r_value + "deg) translate(-50%, -50%)", "transition": "transform linear " + speed + "s" });
         }
-    };
+       
+    }
     function control_mark() {
         var date = new Date();
         var mark_day;
@@ -104,7 +100,7 @@ jQuery(document).ready(function () {
             else {
                 return false;
             }
-        };
+        }
 
 
         this.tap = function () {
@@ -117,12 +113,14 @@ jQuery(document).ready(function () {
                     localStorage.setItem("mark_minutes", mark_minutes);
                     localStorage.setItem("mark_preasure", barometer_value);
 
-                    rotation(jQuery("#Days"), -(mark_day * 11.25), 0, 5, 3);
-                    rotation(jQuery("#Months"), -27.6923-(mark_month * 27.6923), 0, 5, 3);
-                    rotation(jQuery("#Hours"), -14.4 - (mark_hours * 14.4), 0, 5, 3);
-                    rotation(jQuery("#Minutes"), -5.9016 - (mark_minutes * 5.9016), 0, 5, 3);
-                    rotation(jQuery("#Statistic"), ((barometer_value - 1010) * 2.43), 0, 5, 3);
-                    TweenLite.to(jQuery("#Statistic"), 0, { attr: { opacity: 1 } });
+                    jQuery("#lighting").css({ "boxShadow": "inset 0px 0px 5px 3px" + light_color, "transition": "all linear 1.5s"});
+
+                    rotation(jQuery("#days"), -(mark_day * 11.25), 3, 3);
+                    rotation(jQuery("#months"), -27.6923-(mark_month * 27.6923), 3, 3);
+                    rotation(jQuery("#hours"), -14.4-(mark_hours * 14.4), 3, 3);
+                    rotation(jQuery("#minutes"), -5.9016-(mark_minutes * 5.9016), 3, 3);
+                    rotation(jQuery("#statistic_arrow"), ((barometer_value - 1010) * 2.43), 3, 1);
+                    jQuery("#statistic_arrow").css({"opacity":"1"});
                     
                 }
                 else {
@@ -141,15 +139,14 @@ jQuery(document).ready(function () {
                     localStorage.removeItem("mark_hours");
                     localStorage.removeItem("mark_minutes");
 
-                    TweenLite.to(jQuery("#innerGlow > feFlood"), 5, { attr: { "flood-opacity": 0 } });
-                    TweenLite.to(jQuery("#innerGlow > feMorphology"), 4, { attr: { radius: 0 } });
-                    TweenLite.to(jQuery("#innerGlow > feGaussianBlur"), 5, { attr: { stdDeviation: 0 } });
+                    jQuery("#lighting").css({ "boxShadow": "inset 0px 0px 0px 0px" + light_color, "transition": "all linear 1.5s" });
 
-                    rotation(jQuery("#Days"), 0, 0, 5, 3);
-                    rotation(jQuery("#Months"), 0, 0, 5, 3);
-                    rotation(jQuery("#Hours"), 0, 0, 5, 3);
-                    rotation(jQuery("#Minutes"), 0, 0, 5, 3);
-                    TweenLite.to(jQuery("#Statistic"), 0, { attr: { opacity: 0 } });
+                    rotation(jQuery("#days"), 0, 3, 3);
+                    rotation(jQuery("#months"), 0, 3, 3);
+                    rotation(jQuery("#hours"), 0, 3, 3);
+                    rotation(jQuery("#minutes"), 0, 3, 3);
+                    rotation(jQuery("#statistic_arrow"), 0, 3, 2);
+                    jQuery("#statistic_arrow").css({ "opacity": "0" });
 
                 }
                 else {
@@ -168,16 +165,14 @@ jQuery(document).ready(function () {
                     var storage_minute = localStorage.getItem("mark_minutes");
                     var storage_preasure = localStorage.getItem("mark_preasure");
 
-                    TweenLite.to(jQuery("#innerGlow > feFlood"), 0, { attr: { "flood-opacity": 0.5 } });
-                    TweenLite.to(jQuery("#innerGlow > feMorphology"), 0, { attr: { radius: 4 } });
-                    TweenLite.to(jQuery("#innerGlow > feGaussianBlur"), 0, { attr: { stdDeviation: 4 } });
+                    jQuery("#lighting").css({ "boxShadow": "inset 0px 0px 5px 3px" + light_color });
 
-                    rotation(jQuery("#Days"), -(storage_day * 11.25), 1, 0, 2);
-                    rotation(jQuery("#Months"), -27.6923-(storage_month * 27.6923), 1, 0, 2);
-                    rotation(jQuery("#Hours"), -14.4 - (storage_hour * 14.4), 1, 0, 2);
-                    rotation(jQuery("#Minutes"), -5.9016 - (storage_minute * 5.9016), 1, 0, 2);
-                    rotation(jQuery("#Statistic"), ((storage_preasure - 1010) * 2.43), 0, 5, 3);
-                    TweenLite.to(jQuery("#Statistic"), 0, { attr: { opacity: 1 } });
+                    rotation(jQuery("#days"), -(storage_day * 11.25), 0, 3);
+                    rotation(jQuery("#months"), -27.6923-(storage_month * 27.6923), 0, 3);
+                    rotation(jQuery("#hours"), -14.4 - (storage_hour * 14.4), 0, 3);
+                    rotation(jQuery("#minutes"), -5.9016 - (storage_minute * 5.9016), 0, 3);
+                    rotation(jQuery("#statistic_arrow"), ((storage_preasure - 1010) * 2.43), 0, 3);
+                    jQuery("#statistic_arrow").css({ "opacity": "1" });
                 }
                 else {
                     console.log("Storage have no data!!!");
@@ -191,13 +186,13 @@ jQuery(document).ready(function () {
     var set_remove_mark = new control_mark();
     var mark_set = set_remove_mark.check();
     set_remove_mark.start();
-    jQuery("#Button").on("vmousedown", function (e) {
+    jQuery("#button").on("vmousedown", function (e) {
         if (!mark_set) {
             set_remove_mark.tap();
         }
         mark_set = set_remove_mark.check();
     });
-    jQuery("#Button").on("taphold", function (e) {
+    jQuery("#button").on("taphold", function (e) {
         if (mark_set) {
             set_remove_mark.taphold();
         }

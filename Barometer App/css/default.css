@@ -1,7 +1,6 @@
 ﻿body {
-    /* Uncomment this to enable scrolling and zooming
-  touch-action: manipulation;
-  */
+
+    touch-action: none;
     height: 100vh;
     width: 100vw;
     overflow-y:hidden;
@@ -17,15 +16,16 @@
 #main_page {
     overflow: hidden;
 }
-#barometer{
+#barometer {
     position: absolute;
     width: 500px;
     height: 500px;
     left: 50vw;
     transform: translate(-50%, 0%);
-   
+    border-radius: 50%;
+    overflow: hidden;
 }
-#barometer_blick, #barometer_body, #minutes, #hours, #months, #days, #main_arrow, #statistic_arrow {
+#barometer_body, #minutes, #hours, #months, #days, #main_arrow, #statistic_arrow {
     position: absolute;
     width: 100%;
     height: 100%;
@@ -33,14 +33,14 @@
     left: 50%;
     transform: translate(-50%, -50%);
 }
+#minutes, #hours, #months, #days {
+    border-radius: 50%;
+    transform-origin: 0% 0%;
+}
 #barometer_body {
     background: url("../images/Barometer_body.png") no-repeat;
     background-position: center center;
     background-size: 100% 100%;
-}
-#barometer_blick {
-    background: url("../images/Barometer_lighting.png") no-repeat;
-    background-position: 18% 18%;
 }
 #minutes {
     width: 430px;
@@ -70,8 +70,8 @@
     width: 317px;
     height: 317px;
     background: url("../images/Barometer_days.png") no-repeat;
-    background-position: center center;
     background-size: 100% 100%;
+    background-position: center center;
     z-index: -1;
 }
 #arrows {
@@ -86,6 +86,7 @@
     top: 44%;
     transform-origin: 0% 10%;
     transform: rotate(0deg) translate(-50%, -50%);
+    transition: transform linear 250ms;
 }
 
 #main_arrow_body {
@@ -116,6 +117,7 @@
     border-right: 2px solid transparent;
     border-bottom: 186px solid rgba(0, 120, 255, 1);
     background: none;
+    opacity: 0;
     transform-origin: 0% 50%;
     transform: rotate(0deg) translate(-50%, -50%);
 }
@@ -128,7 +130,7 @@
     left: 50%;
     transform: translate(-50%, 0%);
     border-radius: 20px;
-    box-shadow: inset 0px 0px 5px 3px rgba(0, 100, 255, .5);
+    box-shadow: inset 0px 0px 0px 0px rgba(0, 100, 255, .5);
 }
 
 #button {
@@ -143,16 +145,12 @@
     background-position: center center;
 }
 
+
 @media screen and (max-width: 480px) {
     #barometer {
         position: relative;
         width: 98vW;
         height: 98vW;
-    }
-
-
-    #barometer_blick {
-        background-size: 70%;
     }
 
     #main_arrow_tale {
