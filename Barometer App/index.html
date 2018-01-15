@@ -7,26 +7,80 @@
     <link href="css/jquery.mobile-1.4.5.min.css" rel="stylesheet"/>
 </head>
 <body>
-<div data-role="page" id="main_page">
-    <div id="barometer">
-        <div id="barometer_body"></div>
-        <div id="minutes" style="transform: rotate(0deg) translate(-50%, -50%);"></div>
-        <div id="hours" style="transform: rotate(0deg) translate(-50%, -50%);"></div>
-        <div id="months" style="transform: rotate(0deg) translate(-50%, -50%);"></div>
-        <div id="days" style="transform: rotate(0deg) translate(-50%, -50%);"></div>
-        <div id="arrows">
-            <div id="statistic_arrow" class="arrow"></div>
-            <div id="main_arrow" class="arrow">
-                <div id="main_arrow_body"></div>
-                <div id="main_arrow_tale"></div>
+    <div data-role="page" id="main_page">
+        <div data-role="tabs">
+            <div data-role="navbar">
+                <ul style="list-style: none;">
+                    <li>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </li>
+                    <li><a href="#page_1" class="ui-btn-active">Barometer</a></li>
+                    <li><a href="#page_2">Detail information</a></li>
+                </ul>
+            </div>
+            <div id="settings">
+                <div id="settings_back"></div>
+                <div id="settings_front">
+                    <div class="settings_item">
+                        <label for="background_color">Background color: </label>
+                        <div><input name="background_color" id="background_color" type="color" /></div>
+                    </div>
+                    <div class="settings_item">
+                        <label for="lighting_color">Lighting color: </label>
+                        <div><input name="lighting_color" id="lighting_color" type="color" /></div>
+                    </div>
+                    <div class="settings_item">
+                        <label>Shadows:</label>
+                        <input type="checkbox" name="shadows" id="shadows" />
+                    </div>
+                    <div class="settings_footer">
+                    </div>
+                </div>
+            </div>
+            <div id="page_1">
+                <div id="barometer">
+                    <div id="barometer_body"></div>
+                    <div id="minutes" style="transform: rotate(0deg) translate(-50%, -50%);"></div>
+                    <div id="hours" style="transform: rotate(0deg) translate(-50%, -50%);"></div>
+                    <div id="months" style="transform: rotate(0deg) translate(-50%, -50%);"></div>
+                    <div id="days" style="transform: rotate(0deg) translate(-50%, -50%);"></div>
+                    <div id="arrows">
+
+                        <div id="main_arrow" class="arrow">
+                            <div id="main_arrow_body"></div>
+                            <div id="main_arrow_tale"></div>
+                        </div>
+
+                        <div id="statistic_arrow" class="arrow"></div>
+                    </div>
+                    <div id="lighting"></div>
+                    <div id="button"></div>
+                </div>
+            </div>
+            <div id="page_2">
+                <div id="page_2_content">
+                    <div class="page_2_section page_2_preasure">
+                        <h3>Air preasure</h3>
+                        <span></span>
+                        <span></span>
+                    </div>
+                    <div class="page_2_section page_2_mark">
+                        <h3>Preasure mark</h3>
+                        <span></span>
+                    </div>
+                    <div class="page_2_section page_2_forecast">
+                        <h3>Weather forecast</h3>
+                        <span></span>
+                    </div>
+                </div>
             </div>
         </div>
-        <div id="lighting"></div>
-        <div id="button"></div>
     </div>
-</div>
     <script src="js/jquery-2.1.0.min.js"></script>
     <script src="js/jquery.mobile-1.4.5.min.js"></script>
+    <script src="js/jQuery-mobile-swipeupdown.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>

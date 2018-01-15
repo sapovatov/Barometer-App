@@ -1,0 +1,25 @@
+{
+	"en": {
+		"barometer": "Barometer",
+		"detailInformation": "Detail information",
+		"backgroundColor": "Background color: ",
+		"lightingСolor": "Lighting color: ",
+		"shadows": "Shadows: ",
+		"airPreasure": "Air preasure",
+		"preasureMark": "Preasure mark",
+		"weatherForecast": "Weather forecast"
+
+
+
+	},
+	"ru": {
+		"barometer": "Барометр",
+		"detailInformation": "Детальная информация",
+		"backgroundColor": "Цвет фона: ",
+		"lightingСolor": "Цвет подстветки: ",
+		"shadows": "Тени: ",
+		"airPreasure": "Давление воздуха",
+		"preasureMark": "Метка давления",
+		"weatherForecast": "Прогноз погоды"
+	}
+}
