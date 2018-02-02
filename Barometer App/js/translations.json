@@ -1,25 +1,22 @@
-{
-	"en": {
-		"barometer": "Barometer",
-		"detailInformation": "Detail information",
-		"backgroundColor": "Background color: ",
-		"lightingСolor": "Lighting color: ",
-		"shadows": "Shadows: ",
-		"airPreasure": "Air preasure",
-		"preasureMark": "Preasure mark",
-		"weatherForecast": "Weather forecast"
-
-
-
-	},
-	"ru": {
-		"barometer": "Барометр",
-		"detailInformation": "Детальная информация",
-		"backgroundColor": "Цвет фона: ",
-		"lightingСolor": "Цвет подстветки: ",
-		"shadows": "Тени: ",
-		"airPreasure": "Давление воздуха",
-		"preasureMark": "Метка давления",
-		"weatherForecast": "Прогноз погоды"
-	}
+п»ї{
+  "en": {
+    "airPreasure": "Air preasure",
+    "backgroundColor": "Background color: ",
+    "barometer": "Barometer",
+    "detailInformation": "Detail information",
+    "lightingColor": "Lighting color: ",
+    "preasureMark": "Preasure mark",
+    "shadows": "Shadows: ",
+    "weatherForecast": "Weather forecast"
+  },
+  "ru": {
+    "airPreasure": "Р”Р°РІР»РµРЅРёРµ РІРѕР·РґСѓС…Р°",
+    "backgroundColor": "Р¦РІРµС‚ С„РѕРЅР°: ",
+    "barometer": "Р‘Р°СЂРѕРјРµС‚СЂ",
+    "detailInformation": "Р”РµС‚Р°Р»СЊРЅР°СЏ РёРЅС„РѕСЂРјР°С†РёСЏ",
+    "lightingColor": "Р¦РІРµС‚ РїРѕРґСЃС‚РІРµС‚РєРё: ",
+    "preasureMark": "РњРµС‚РєР° РґР°РІР»РµРЅРёСЏ",
+    "shadows": "РўРµРЅРё: ",
+    "weatherForecast": "РџСЂРѕРіРЅРѕР· РїРѕРіРѕРґС‹"
+  }
 }
