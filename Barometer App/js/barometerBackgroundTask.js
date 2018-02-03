@@ -40,7 +40,7 @@
         console.log("Action from toast:" + taskActionDetail);
         
         var key = null,
-            settings = Windows.Storage.ApplicationData.current.localSettings;
+            applicationData = Windows.Storage.ApplicationData.current.localSettings;
         //
         // TODO: Write your JavaScript code here to do work in the background.
         // If you write a loop or callback, remember  have it check for canceled==false.
@@ -239,7 +239,7 @@
         // Record information in LocalSettings to communicate with the app.
         //
         key = backgroundTaskInstance.task.taskId.toString();
-        settings.values[key] = "Succeeded";
+        applicationData.values[key] = "Succeeded";
 
         //
         // A JavaScript background task must call close when it is done.

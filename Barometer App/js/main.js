@@ -2,17 +2,14 @@
 
 jQuery(document).ready(function () {
 
-    var window_height = jQuery(window).height();
-
     var resourceLoader = new Windows.ApplicationModel.Resources.ResourceLoader();
+    var applicationData = Windows.Storage.ApplicationData.current.localSettings;
 
+    var window_height = jQuery(window).height();
     var light_color = "#0077ff";
     var main_arrow = jQuery("#Main");
-
     jQuery("#lighting_color").val(light_color);
-
     reposition(1);
-
     //positioning
     var window_width = jQuery(window).width();
     if (window_width < 500) {
@@ -21,7 +18,6 @@ jQuery(document).ready(function () {
         var coef = ((100 * new_width) / 500) / 100;
         reposition(coef);
     }
-
     function reposition(coeficient) {
         jQuery("#barometer").css({ "top": (jQuery(window).height() - jQuery("#barometer").height()) / 2 + "px" })
         jQuery("#minutes").css({ "width": jQuery("#minutes").width() * coeficient + "px", "height": jQuery("#minutes").height() * coeficient + "px" });
@@ -87,10 +83,10 @@ jQuery(document).ready(function () {
         var mark_day;
         var mark_month;
         var mark_hours;
-        var mark_minutes;
+        var mark_minutes; 
 
         var storage_day;
-        var storage_month;
+        var storage_month; 
         var storage_hour;
         var storage_minute;
         var storage_preasure;
@@ -105,7 +101,7 @@ jQuery(document).ready(function () {
         };
 
         this.check = function () {
-            if (localStorage.mark_day) {
+            if (applicationData.values["mark_day"]) {
                 return true;
             }
             else {
@@ -115,115 +111,103 @@ jQuery(document).ready(function () {
 
         this.tap = function () {
             this.update_date();
-            if (typeof (Storage) !== "undefined") {
-                if (!this.check()) {
-                    localStorage.setItem("mark_day", mark_day);
-                    localStorage.setItem("mark_month", mark_month);
-                    localStorage.setItem("mark_hours", mark_hours);
-                    localStorage.setItem("mark_minutes", mark_minutes);
-                    localStorage.setItem("mark_preasure", barometer_value);
+            if (!this.check()) {
+                applicationData.values["mark_day"] = mark_day;
+                applicationData.values["mark_month"] = mark_month;
+                applicationData.values["mark_hours"] = mark_hours;
+                applicationData.values["mark_minutes"] = mark_minutes;
+                applicationData.values["mark_preasure"] =  barometer_value;
 
-                    jQuery("#lighting").css({ "boxShadow": "inset 0px 0px 5px 1px" + light_color, "transition": "all linear 1.5s" });
-                    jQuery(".page_2_mark span:last-of-type").css({ "color": light_color });
-                    rotation(jQuery("#days"), -(mark_day * 11.25), 3, 3);
-                    rotation(jQuery("#months"), -27.6923 - (mark_month * 27.6923), 3, 3);
-                    rotation(jQuery("#hours"), -14.4 - (mark_hours * 14.4), 3, 3);
-                    rotation(jQuery("#minutes"), -5.9016 - (mark_minutes * 5.9016), 3, 3);
-                    rotation(jQuery("#statistic_arrow"), ((barometer_value - 1010) * 2.43), 3, 1);
-                    jQuery("#statistic_arrow").css({ "opacity": "1" });
-                }
-                else {
-                    console.log("Date is already marked!!!");
-                }
+                jQuery("#lighting").css({ "boxShadow": "inset 0px 0px 5px 1px" + light_color, "transition": "all linear 1.5s" });
+                jQuery(".page_2_mark span:last-of-type").css({ "color": light_color });
+                rotation(jQuery("#days"), -(mark_day * 11.25), 3, 3);
+                rotation(jQuery("#months"), -27.6923 - (mark_month * 27.6923), 3, 3);
+                rotation(jQuery("#hours"), -14.4 - (mark_hours * 14.4), 3, 3);
+                rotation(jQuery("#minutes"), -5.9016 - (mark_minutes * 5.9016), 3, 3);
+                rotation(jQuery("#statistic_arrow"), ((barometer_value - 1010) * 2.43), 3, 1);
+                jQuery("#statistic_arrow").css({ "opacity": "1" });
+            }
+            else {
+                console.log("Date is already marked!!!");
+            }
 
-            } else {
-                console.log("Sorry! No Web Storage support");
-            };
         };
         this.taphold = function () {
-            if (typeof (Storage) !== "undefined") {
-                if (localStorage.mark_day) {
-                    localStorage.removeItem("mark_day");
-                    localStorage.removeItem("mark_month");
-                    localStorage.removeItem("mark_hours");
-                    localStorage.removeItem("mark_minutes");
+            
+            if (applicationData.values["mark_day"]) {
+                applicationData.values.remove("mark_day");
+                applicationData.values.remove("mark_month");
+                applicationData.values.remove("mark_hours");
+                applicationData.values.remove("mark_minutes");
 
-                    jQuery("#lighting").css({ "boxShadow": "inset 0px 0px 0px 0px" + light_color, "transition": "all linear 1.5s" });
+                jQuery("#lighting").css({ "boxShadow": "inset 0px 0px 0px 0px" + light_color, "transition": "all linear 1.5s" });
 
-                    rotation(jQuery("#days"), 0, 3, 3);
-                    rotation(jQuery("#months"), 0, 3, 3);
-                    rotation(jQuery("#hours"), 0, 3, 3);
-                    rotation(jQuery("#minutes"), 0, 3, 3);
-                    rotation(jQuery("#statistic_arrow"), 0, 3, 2);
-                    jQuery("#statistic_arrow").css({ "opacity": "0" });
-                    jQuery(".page_2_mark span:last-of-type").css({ "color": "#fff" });
+                rotation(jQuery("#days"), 0, 3, 3);
+                rotation(jQuery("#months"), 0, 3, 3);
+                rotation(jQuery("#hours"), 0, 3, 3);
+                rotation(jQuery("#minutes"), 0, 3, 3);
+                rotation(jQuery("#statistic_arrow"), 0, 3, 2);
+                jQuery("#statistic_arrow").css({ "opacity": "0" });
+                jQuery(".page_2_mark span:last-of-type").css({ "color": "#fff" });
 
-                }
-                else {
-                    console.log("Date is already removed!!!");
-                };
-            } else {
-                console.log("Sorry! No Web Storage support");
+            }
+            else {
+                console.log("Date is already removed!!!");
             };
         };
         this.start = function () {
-            if (typeof (Storage) !== "undefined") {
 
-                if (localStorage.background_color) {
-                    jQuery("body").attr("style", "background: " + localStorage.background_color + " !important");
-                    jQuery("#background_color").val(localStorage.background_color);
-                }
-                if (localStorage.lighting_color) {
-                    jQuery("#statistic_arrow").css({ "borderBottomColor": localStorage.lighting_color });
-                    jQuery(".page_2_mark span:last-of-type").attr("style", "color: " + localStorage.lighting_color + " !important");
-                    jQuery("#lighting_color").val(localStorage.lighting_color);
-                    light_color = localStorage.lighting_color;
-                }
+            if (applicationData.values["background_color"]) {
+                jQuery("body").attr("style", "background: " + applicationData.values["background_color"] + " !important");
+                jQuery("#background_color").val(applicationData.values["background_color"]);
+            }
+            if (applicationData.values["lighting_color"]) {
+                jQuery("#statistic_arrow").css({ "borderBottomColor": applicationData.values["lighting_color"] });
+                jQuery(".page_2_mark span:last-of-type").attr("style", "color: " + applicationData.values["lighting_color"] + " !important");
+                jQuery("#lighting_color").val(applicationData.values["lighting_color"]);
+                light_color = applicationData.values["lighting_color"];
+            }
 
-                if (localStorage.shadows) {
-                    jQuery("#shadows").prop({ 'checked': true });
-                    jQuery("#button").css({ "filter": "drop-shadow(10px 10px 3px rgba(0, 0, 0, .25))" });
-                }
+            if (applicationData.values["shadows"]) {
+                jQuery("#shadows").prop({ 'checked': true });
+                jQuery("#button").css({ "filter": "drop-shadow(10px 10px 3px rgba(0, 0, 0, .25))" });
+            }
 
-                if (localStorage.mark_day) {
-                    storage_day = localStorage.getItem("mark_day");
-                    storage_month = localStorage.getItem("mark_month");
-                    storage_hour = localStorage.getItem("mark_hours");
-                    storage_minute = localStorage.getItem("mark_minutes");
-                    storage_preasure = localStorage.getItem("mark_preasure");
+            if (applicationData.values["mark_day"]) {
+                storage_day = applicationData.values["mark_day"];
+                storage_month = applicationData.values["mark_month"];
+                storage_hour = applicationData.values["mark_hours"];
+                storage_minute = applicationData.values["mark_minutes"];
+                storage_preasure = applicationData.values["mark_preasure"];
 
-                    jQuery("#lighting").css({ "boxShadow": "inset 0px 0px 5px 1px" + light_color });
+                jQuery("#lighting").css({ "boxShadow": "inset 0px 0px 5px 1px" + light_color });
 
-                    rotation(jQuery("#days"), -(storage_day * 11.25), 0, 3);
-                    rotation(jQuery("#months"), -27.6923 - (storage_month * 27.6923), 0, 3);
-                    rotation(jQuery("#hours"), -14.4 - (storage_hour * 14.4), 0, 3);
-                    rotation(jQuery("#minutes"), -5.9016 - (storage_minute * 5.9016), 0, 3);
-                    rotation(jQuery("#statistic_arrow"), ((storage_preasure - 1010) * 2.43), 0, 3);
-                    jQuery("#statistic_arrow").css({ "opacity": "1" });
-                }
-                else {
-                    console.log("Storage have no data!!!");
-                }
-
-            } else {
-                console.log("Sorry! No Web Storage support");
-            };
+                rotation(jQuery("#days"), -(storage_day * 11.25), 0, 3);
+                rotation(jQuery("#months"), -27.6923 - (storage_month * 27.6923), 0, 3);
+                rotation(jQuery("#hours"), -14.4 - (storage_hour * 14.4), 0, 3);
+                rotation(jQuery("#minutes"), -5.9016 - (storage_minute * 5.9016), 0, 3);
+                rotation(jQuery("#statistic_arrow"), ((storage_preasure - 1010) * 2.43), 0, 3);
+                jQuery("#statistic_arrow").css({ "opacity": "1" });
+            }
+            else {
+                console.log("Storage have no data!!!");
+            } 
         };
         this.details = function () {
-            storage_day = localStorage.getItem("mark_day");
-            storage_month = localStorage.getItem("mark_month");
-            storage_hour = localStorage.getItem("mark_hours");
-            storage_minute = localStorage.getItem("mark_minutes");
-            storage_preasure = localStorage.getItem("mark_preasure");
+            storage_day = applicationData.values["mark_day"];
+            storage_month = applicationData.values["mark_month"];
+            storage_hour = applicationData.values["mark_hours"];
+            storage_minute = applicationData.values["mark_minutes"];
+            storage_preasure = applicationData.values["mark_preasure"];
             day = (storage_day <= 9) ? "0" + storage_day : storage_day;
             month = (storage_month <= 9) ? "0" + (Number(storage_month)+1) : (Number(storage_month)+1);
             hour = (storage_hour <= 9) ?"0" + storage_hour : storage_hour;
             minute = (storage_minute <= 9) ?"0" + storage_minute : storage_minute;
-            if (localStorage.mark_day) {
+            if (applicationData.values["mark_day"]) {
                 jQuery(".page_2_mark span:last-of-type").html(Math.round(storage_preasure / 1.33322387415) + " mmHg &nbsp;&nbsp;" +day+ "." +month+ " " +hour+":"+minute);
             }
             else {
-                jQuery(".page_2_mark span:last-of-type").html("There no preasure mark");
+                jQuery(".page_2_mark span:last-of-type").html(resourceLoader.getString('noMark'));
             }
             jQuery(".page_2_preasure span:first-of-type").html(barometer_value + " hPa ")
             jQuery(".page_2_preasure span:last-of-type").html(Math.round(barometer_value / 1.33322387415) + " mmHg");
@@ -299,14 +283,14 @@ jQuery(document).ready(function () {
 
     jQuery("#background_color").change(function (e) {
         jQuery("body").attr("style", "background: " + this.value + " !important");
-        localStorage.setItem("background_color", this.value);
+        applicationData.values["background_color"] =  this.value;
     });
 
     jQuery("#lighting_color").change(function (e) {
         jQuery("#statistic_arrow").css({ "borderBottomColor": this.value });
         jQuery("#lighting").css({ "boxShadow": "inset 0px 0px 5px 3px" + this.value });
         light_color = this.value;
-        localStorage.setItem("lighting_color", this.value);
+        applicationData.values["lighting_color"] = this.value;
     });
 
     var package = Windows.ApplicationModel.Package.current;
@@ -322,11 +306,11 @@ jQuery(document).ready(function () {
     jQuery("#shadows").on("click", function () {
         if (jQuery(this).is(":checked")) {
             jQuery("#button").css({ "filter": "drop-shadow(10px 10px 3px rgba(0, 0, 0, .25))" });
-            localStorage.setItem("shadows", 1);
+            applicationData.values["shadows"] =  true;
         }
         else {
             jQuery("#button").css({ "filter": "none" });
-            localStorage.removeItem("shadows");
+            applicationData.values.remove("shadows");
         }
     });
 

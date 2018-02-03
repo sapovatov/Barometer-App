@@ -132,6 +132,9 @@
   <data name="lightingColor" xml:space="preserve">
     <value>Lighting color:</value>
   </data>
+  <data name="noMark" xml:space="preserve">
+    <value>There is no preasure mark</value>
+  </data>
   <data name="preasureMark" xml:space="preserve">
     <value>Preasure mark</value>
   </data>
