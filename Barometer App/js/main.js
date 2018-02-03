@@ -4,6 +4,8 @@ jQuery(document).ready(function () {
 
     var window_height = jQuery(window).height();
 
+    var resourceLoader = new Windows.ApplicationModel.Resources.ResourceLoader();
+
     var light_color = "#0077ff";
     var main_arrow = jQuery("#Main");
 
@@ -342,19 +344,19 @@ jQuery(document).ready(function () {
     else{
         lang = "en";
     }
-    translate(lang);
-    function translate(lang) {
-        jQuery.getJSON("js/translations.json", function (data) {
-            jQuery("#main_page ul li:nth-of-type(2)>a").html(data[lang].barometer);
-            jQuery("#main_page ul li:nth-of-type(3)>a").html(data[lang].detailInformation);
-            jQuery(".settings_item:nth-of-type(1) label").html(data[lang].backgroundColor);
-            jQuery(".settings_item:nth-of-type(2) label").html(data[lang].lightingColor);
-            jQuery(".settings_item:nth-of-type(3) label").html(data[lang].shadows);
-            jQuery(".page_2_preasure h3").html(data[lang].airPreasure);
-            jQuery(".page_2_mark h3").html(data[lang].preasureMark);
-            jQuery(".page_2_forecast h3").html(data[lang].weatherForecast);
+    translate();
+    function translate() {
+        
+            jQuery("#main_page ul li:nth-of-type(2)>a").html(resourceLoader.getString('barometer'));
+            jQuery("#main_page ul li:nth-of-type(3)>a").html(resourceLoader.getString('detailInformation'));
+            jQuery(".settings_item:nth-of-type(1) label").html(resourceLoader.getString('backgroundColor'));
+            jQuery(".settings_item:nth-of-type(2) label").html(resourceLoader.getString('lightingColor'));
+            jQuery(".settings_item:nth-of-type(3) label").html(resourceLoader.getString('shadows'));
+            jQuery(".page_2_preasure h3").html(resourceLoader.getString('airPreasure'));
+            jQuery(".page_2_mark h3").html(resourceLoader.getString('preasureMark'));
+            jQuery(".page_2_forecast h3").html(resourceLoader.getString('weatherForecast'));
 
-        });
+       
     }
 
     /*-----------------------------------------------BACKGROUND TASKS--------------------------------------*/

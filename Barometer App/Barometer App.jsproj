@@ -347,6 +347,9 @@
     <Content Include="Scripts\jquery.mobile-1.4.5.js" />
     <Content Include="js\jquery.mobile-1.4.5.min.js" />
     <Content Include="js\jquery.mobile-1.4.5.min.map" />
+    <PRIResource Include="Strings\uk-UA\resources.resw" />
+    <PRIResource Include="Strings\ru-RU\resources.resw" />
+    <PRIResource Include="Strings\en-US\resources.resw" />
     <None Include="Barometer App_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
@@ -356,9 +359,6 @@
       <CopyLocal>True</CopyLocal>
       <SpecificVersion>True</SpecificVersion>
     </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Strings\en-US\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\$(WMSJSProjectDirectory)\Microsoft.VisualStudio.$(WMSJSProject).targets" />
   <Import Project="..\packages\Microsoft.Toolkit.Uwp.Notifications.JavaScript.2.0.0\build\Windows\Microsoft.Toolkit.Uwp.Notifications.JavaScript.targets" Condition="Exists('..\packages\Microsoft.Toolkit.Uwp.Notifications.JavaScript.2.0.0\build\Windows\Microsoft.Toolkit.Uwp.Notifications.JavaScript.targets')" />

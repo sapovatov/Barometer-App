@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" xmlns:iot="http://schemas.microsoft.com/appx/manifest/iot/windows10" IgnorableNamespaces="uap mp iot">
-  <Identity Name="f8e2033c-72a2-42e8-9e23-4967d7986ac4" Version="2.2.0.0" Publisher="CN=Alexey" />
+  <Identity Name="f8e2033c-72a2-42e8-9e23-4967d7986ac4" Version="2.3.0.0" Publisher="CN=Alexey" />
   <mp:PhoneIdentity PhoneProductId="f8e2033c-72a2-42e8-9e23-4967d7986ac4" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>Barometer App</DisplayName>
@@ -15,7 +15,7 @@
   </Resources>
   <Applications>
     <Application Id="App" StartPage="index.html">
-      <uap:VisualElements DisplayName="Barometer App" Description="This is Barometer App that can give you information of current air pressure on devices equiped with pressure sensor" BackgroundColor="transparent" Square150x150Logo="images\Square150x150Logo.png" Square44x44Logo="images\Square44x44Logo.png">
+      <uap:VisualElements DisplayName="ms-resource:barometer" Description="This is Barometer App that can give you information of current air pressure on devices equiped with pressure sensor" BackgroundColor="transparent" Square150x150Logo="images\Square150x150Logo.png" Square44x44Logo="images\Square44x44Logo.png">
         <uap:LockScreen Notification="badgeAndTileText" BadgeLogo="images\BadgeLogo.png" />
         <uap:DefaultTile Wide310x150Logo="images\Wide310x150Logo.png" Square310x310Logo="images\LargeTile.png" Square71x71Logo="images\SmallTile.png" ShortName="Barometer App">
           <uap:ShowNameOnTiles>
