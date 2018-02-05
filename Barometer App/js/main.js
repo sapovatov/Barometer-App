@@ -31,6 +31,7 @@ jQuery(document).ready(function () {
         jQuery("#button").css({ "width": jQuery("#button").width() * coeficient + "px", "height": jQuery("#button").height() * coeficient + "px" });
     };
 
+
     //barometer part
     var desiredReportIntervalMs;
     var barometer;
@@ -265,7 +266,7 @@ jQuery(document).ready(function () {
         jQuery("#settings").css({ "visibility": "hidden" });
         jQuery("#settings_front").css({ "transform": "translate(-100%, 0%)" });
     });
-    jQuery(".ui-block-a").on("click", function () {
+    jQuery("#settings_btn").on("click", function () {
         jQuery("#settings").css({ "visibility": "visible" });
         jQuery("#settings_front").css({ "transform": "translate(0%, 0%)" });
         hide_settings();
@@ -279,7 +280,6 @@ jQuery(document).ready(function () {
             jQuery(".ui-block-b a").click();
         }
     });
-    jQuery("#settings_front input").unwrap();
 
     jQuery("#background_color").change(function (e) {
         jQuery("body").attr("style", "background: " + this.value + " !important");
