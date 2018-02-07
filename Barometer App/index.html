@@ -14,70 +14,72 @@
                     <span></span>
                     <span></span>
                 </li>
-                <li class="tab menu-btn-active"><a href="#page_1">Barometer</a></li>
-                <li class="tab"><a href="#page_2">Detail information</a></li>
+                <li class="tab middleTab activeTab"><a href="#page_1">Barometer</a></li>
+                <li class="tab lastTab"><a href="#page_2">Detail information</a></li>
             </ul>
         </nav>
         <div id="settings">
-             <div id="settings_back"></div>
-             <div id="settings_front">
-                 <div class="settings_item">
-                     <label for="background_color">Background color: </label>
-                     <div><input name="background_color" id="background_color" type="color" /></div>
-                 </div>
-                 <div class="settings_item">
-                     <label for="lighting_color">Lighting color: </label>
-                     <div><input name="lighting_color" id="lighting_color" type="color" /></div>
-                 </div>
-                 <div class="settings_item">
-                     <label>Shadows:</label>
-                     <input type="checkbox" name="shadows" id="shadows" />
-                 </div>
+            <div id="settings_back"></div>
+            <div id="settings_front">
+                <div class="settings_item">
+                    <label for="background_color">Background color: </label>
+                    <div><input name="background_color" id="background_color" type="color" /></div>
+                </div>
+                <div class="settings_item">
+                    <label for="lighting_color">Lighting color: </label>
+                    <div><input name="lighting_color" id="lighting_color" type="color" /></div>
+                </div>
+                <div class="settings_item">
+                    <label>Shadows:</label>
+                    <input type="checkbox" name="shadows" id="shadows" />
+                </div>
 
-                 <div class="settings_footer">
-                 </div>
-             </div>
-         </div>
-        <div id="page_1">
-             <div id="barometer">
-                 <div id="barometer_body"></div>
-                 <div id="minutes" style="transform: rotate(0deg) translate(-50%, -50%);"></div>
-                 <div id="hours" style="transform: rotate(0deg) translate(-50%, -50%);"></div>
-                 <div id="months" style="transform: rotate(0deg) translate(-50%, -50%);"></div>
-                 <div id="days" style="transform: rotate(0deg) translate(-50%, -50%);"></div>
-                 <div id="arrows">
-
-                     <div id="main_arrow" class="arrow">
-                         <div id="main_arrow_body"></div>
-                         <div id="main_arrow_tale"></div>
-                     </div>
-
-                     <div id="statistic_arrow" class="arrow"></div>
-                 </div>
-                 <div id="lighting"></div>
-                 <div id="button"></div>
-             </div>
-         </div>
-        <div id="page_2">
-                <div id="page_2_content">
-                    <div class="page_2_section page_2_preasure">
-                        <h3>Air preasure</h3>
-                        <span>register</span>
-                        <span>unregister</span>
-                    </div>
-                    <div class="page_2_section page_2_mark">
-                        <h3>Preasure mark</h3>
-                        <span></span>
-                    </div>
-                    <div class="page_2_section page_2_forecast">
-                        <h3>Weather forecast</h3>
-                        <span></span>
-                    </div>
+                <div class="settings_footer">
                 </div>
             </div>
+        </div>
+        <div id="page_1">
+            <br /><br /> <br /> <br />
+            <div id="test"></div>
+            <div id="barometer">
+                <div id="barometer_body"></div>
+                <div id="minutes" style="transform: rotate(0deg) translate(-50%, -50%);"></div>
+                <div id="hours" style="transform: rotate(0deg) translate(-50%, -50%);"></div>
+                <div id="months" style="transform: rotate(0deg) translate(-50%, -50%);"></div>
+                <div id="days" style="transform: rotate(0deg) translate(-50%, -50%);"></div>
+                <div id="arrows">
+
+                    <div id="main_arrow" class="arrow">
+                        <div id="main_arrow_body"></div>
+                        <div id="main_arrow_tale"></div>
+                    </div>
+
+                    <div id="statistic_arrow" class="arrow"></div>
+                </div>
+                <div id="lighting"></div>
+                <div id="button"></div>
+            </div>
+        </div>
+        <div id="page_2">
+            <div id="page_2_content">
+                <div class="page_2_section page_2_preasure">
+                    <h3>Air preasure</h3>
+                    <span>register</span>
+                    <span>unregister</span>
+                </div>
+                <div class="page_2_section page_2_mark">
+                    <h3>Preasure mark</h3>
+                    <span></span>
+                </div>
+                <div class="page_2_section page_2_forecast">
+                    <h3>Weather forecast</h3>
+                    <span></span>
+                </div>
+            </div>
+        </div>
     </div>
     <script src="js/jquery-2.1.0.min.js"></script>
-    <script src="js/hammer.min.js"></script>
+    <script src="js/hammer.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html>

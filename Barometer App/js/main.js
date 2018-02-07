@@ -31,6 +31,115 @@ jQuery(document).ready(function () {
         jQuery("#button").css({ "width": jQuery("#button").width() * coeficient + "px", "height": jQuery("#button").height() * coeficient + "px" });
     };
 
+    //-----------------------------NAVIGATION PART----------------------------------//
+    var direction;
+    var mainPage = document.getElementById("main_page");
+    var mainPageManager = new Hammer.Manager(mainPage);
+    var swipeManager = new Hammer.Manager(mainPage);
+    var pan = new Hammer.Pan();
+    var swipe = new Hammer.Swipe();
+    mainPageManager.add(pan);
+    swipeManager.add(swipe);
+    swipeManager.on("swipeup swipedown", function (e) {
+        if (e.type == "swipeup") {
+            jQuery("nav").css({ "top": "-" + jQuery("nav").height() + "px" });
+            jQuery("#settings").css({ "top": "0px", "height": (jQuery(document).height() + jQuery("nav").height()) + "px" });
+        }
+        else if (e.type == "swipedown") {
+            jQuery("nav").css({ "top": "0px" });
+            jQuery("#settings").css({ "top": "36px", "height": "100vh" });
+        };
+    });
+    mainPageManager.on("panright panleft panend", function (e) {
+        if (((e.center.x - e.deltaX) >= 75)) {
+            if (e.type == "panleft" && !(jQuery(".lastTab").hasClass("activeTab"))) {
+                jQuery("body").scrollLeft(e.distance);
+                direction = e.direction;
+            }
+            else if (e.type == "panright" && e.deltaX < 0 && !(jQuery(".lastTab").hasClass("activeTab"))) {
+                jQuery("body").scrollLeft(e.distance);
+            }
+            else if (e.type == "panright" && !(jQuery(".middleTab").hasClass("activeTab"))) {
+                jQuery("body").scrollLeft(jQuery("body").width() - e.distance);
+                direction = e.direction;
+            }
+            else if (e.type == "panleft" && e.deltaX > 0 && !(jQuery(".middleTab").hasClass("activeTab"))) {
+                jQuery("body").scrollLeft(jQuery("body").width() - e.distance);
+            };
+            if (e.type == "panend") {
+                if (direction == 2 && (e.distance >= (jQuery("body").width() * 0.3)) && !(jQuery(".lastTab").hasClass("activeTab"))) {
+                    jQuery("body").scrollLeft(jQuery("body").width());
+                    jQuery(".middleTab").removeClass("activeTab");
+                    jQuery(".lastTab").addClass("activeTab");
+                }
+                else if (direction == 2 && (e.distance < (jQuery("body").width() * 0.3)) && !(jQuery(".lastTab").hasClass("activeTab"))) {
+                    jQuery("body").scrollLeft(0);
+                }
+                else if (direction == 4 && (e.distance >= (jQuery("body").width() * 0.3)) && !(jQuery(".middleTab").hasClass("activeTab"))) {
+                    jQuery("body").scrollLeft(0);
+                    jQuery(".lastTab").removeClass("activeTab");
+                    jQuery(".middleTab").addClass("activeTab");
+                }
+                else if (direction == 4 && (e.distance < (jQuery("body").width() * 0.3)) && !(jQuery(".middleTab").hasClass("activeTab"))) {
+                    jQuery("body").scrollLeft(jQuery("body").width());
+                };
+            }
+        }
+        else if (((e.center.x - e.deltaX) < 75) && (e.deltaX <= (jQuery("#settings_front").width()))) {
+            jQuery("#settings_front").css({ "left": -(jQuery("#settings_front").width() - e.deltaX) + "px", "transition": "left linear 0ms" });
+            jQuery("#settings").css({ "visibility": "visible" });
+            if (e.type == "panend") {
+                if (e.distance >= (jQuery("#settings_front").width() * 0.3)) {
+                    show_settings();
+
+                }
+                else {
+                    hide_settings();
+                }
+            }
+        }
+        else if (((e.center.x - e.deltaX) < 75) && (e.deltaX > (jQuery("#settings_front").width()))) {
+            if (e.type == "panend") {
+                jQuery("#settings_back").one("click", function () {
+                    hide_settings();
+                });
+            }
+        };
+    });
+    function show_settings() {
+        jQuery("#settings_front").css({ "left": "0%", "transition": "left linear 250ms" });
+        jQuery("#settings").css({ "visibility": "visible" });
+        jQuery("#settings_btn span:first-of-type").css({ "top": "30%" });
+        jQuery("#settings_btn span:last-of-type").css({"top":"70%"});
+        mainPageManager.remove(pan);
+        jQuery("#settings_back").one("click", function () {
+            hide_settings();
+        });
+    }
+
+    function hide_settings() {
+        jQuery("#settings_front").css({ "left": "-50%", "transition": "left linear 250ms" });
+        jQuery("#settings").css({ "visibility": "hidden" });
+        jQuery("#settings_btn span:first-of-type").css({ "top": "35%" });
+        jQuery("#settings_btn span:last-of-type").css({"top":"65%"});
+            mainPageManager.add(pan);
+    };
+
+    jQuery("#settings_btn").on("click", function () {
+        show_settings();
+    });
+    jQuery(".middleTab").on("click", function () {
+        if (!(jQuery(this).hasClass("activeTab"))) {
+            jQuery(this).addClass("activeTab");
+            jQuery(".lastTab").removeClass("activeTab");
+        };
+    });
+    jQuery(".lastTab").on("click", function () {
+        if (!(jQuery(this).hasClass("activeTab"))) {
+            jQuery(this).addClass("activeTab");
+            jQuery(".middleTab").removeClass("activeTab");
+        };
+    });
 
     //barometer part
     var desiredReportIntervalMs;
@@ -234,51 +343,6 @@ jQuery(document).ready(function () {
             set_remove_mark.taphold();
         }
         mark_set = set_remove_mark.check();
-    });
-
-    jQuery("body").on("swipeup", function (e) {
-        jQuery(".ui-navbar ul").css({ "top": "-" + jQuery(".ui-navbar").height() + "px" });
-        jQuery("#settings").css({ "top": "0px", "height": (jQuery(document).height() + jQuery(".ui-navbar").height()) + "px" });
-    });
-    jQuery("body").on("swipedown", function (e) {
-        jQuery(".ui-navbar ul").css({ "top": "0px" });
-        jQuery("#settings").css({ "top": "36px", "height": "100vh" });
-    });
-
-    jQuery("body").on("swiperight", function (e) {
-        if (e.swipestart.coords[0] <= 75) {
-            jQuery("#settings").css({ "visibility": "visible" });
-            jQuery("#settings_front").css({ "transform": "translate(0%, 0%)" });
-            hide_settings();
-        }
-    });
-
-    function hide_settings() {
-        setTimeout(function () {
-            jQuery("#settings_back").one("click", function () {
-                jQuery("#settings").css({ "visibility": "hidden" });
-                jQuery("#settings_front").css({ "transform": "translate(-100%, 0%)" });
-            });
-        }, 500);
-    };
-
-    jQuery("#settings_front").on("swipeleft", function () {
-        jQuery("#settings").css({ "visibility": "hidden" });
-        jQuery("#settings_front").css({ "transform": "translate(-100%, 0%)" });
-    });
-    jQuery("#settings_btn").on("click", function () {
-        jQuery("#settings").css({ "visibility": "visible" });
-        jQuery("#settings_front").css({ "transform": "translate(0%, 0%)" });
-        hide_settings();
-    });
-
-    jQuery("#page_1").on("swipeleft", function (e) {
-        jQuery(".ui-block-c a").click();
-    });
-    jQuery("#page_2").on("swiperight", function (e) {
-        if (e.swipestart.coords[0] > 75) {
-            jQuery(".ui-block-b a").click();
-        }
     });
 
     jQuery("#background_color").change(function (e) {

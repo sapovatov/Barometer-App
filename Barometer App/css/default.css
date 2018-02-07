@@ -1,5 +1,5 @@
 ﻿body {
-    touch-action: none;
+    /*touch-action: none;*/
     height: 100vh;
     width: 100vw;
     margin: 0;
@@ -8,22 +8,25 @@
     -webkit-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    background: #0f0;
+    font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
 #main_page {
     overflow: hidden;
     background-color: transparent !important;
+    height: 100vh;
 }
 
 nav {
     position: fixed;
     width: 100vw;
-    background: #ccc;
+    top: 0px;
+    transition: all linear 250ms;
 }
 
 #tabs {
     width: 100%;
-    background: #aaa;
     list-style: none;
     padding: 0;
     margin: 0;
@@ -33,43 +36,53 @@ nav {
         float: left;
         height: 36px;
         width: 45%;
-        background: #777;
+        background: #000;
     }
 
-    #tabs #settings_btn {
-        position: relative;
-        width: 10%;
-        background: #333;
+.activeTab {
+    background: rgba(0, 0, 0, .25) !important;
+}
+
+    .activeTab > a {
+        font-weight: bold;
+        text-shadow: 1px 1px 1px #333;
     }
 
-        #tabs #settings_btn span {
-            position: absolute;
-            width: 30px;
-            height: 2px;
-            left: 50%;
-            top: 50%;
-            transform: translate(-50%, -50%);
-            background: #fff;
+#tabs #settings_btn {
+    position: relative;
+    width: 10%;
+}
+
+    #tabs #settings_btn span {
+        position: absolute;
+        width: 30px;
+        height: 2px;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
+        background: #fff;
+        transition: top linear 50ms;
+    }
+
+        #tabs #settings_btn span:first-of-type {
+            top: 35%;
         }
 
-            #tabs #settings_btn span:first-of-type {
-                top: 30%;
-            }
+        #tabs #settings_btn span:last-of-type {
+            top: 65%;
+        }
 
-            #tabs #settings_btn span:last-of-type {
-                top: 70%;
-            }
-
-    #tabs .tab > a {
-        display: block;
-        height: 100%;
-        width: 100%;
-        text-align: center;
-        line-height: 36px;
-        text-decoration: none;
-        padding: 0;
-        margin: 0;
-    }
+#tabs .tab > a {
+    display: block;
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    line-height: 36px;
+    color: #fff;
+    text-decoration: none;
+    padding: 0;
+    margin: 0;
+}
 
 
 #settings {
@@ -90,7 +103,7 @@ nav {
 #settings_front {
     position: absolute;
     top: 0;
-    left: 0;
+    left: -50%;
     width: 50%;
     height: 100%;
     color: #fff;
@@ -99,8 +112,8 @@ nav {
     box-sizing: border-box;
     background: #000;
     visibility: visible;
-    transform: translate(-100%, 0);
-    transition: transform linear 500ms, top ease-out 250ms;
+    transform: translate(0%, 0);
+    transition: top ease-out 250ms;
 }
 
     #settings_front .settings_item {
@@ -135,10 +148,10 @@ nav {
     right: 10px;
 }
 
-.settings_item div input {
-    width: 40px;
-    padding: 0px 0px !important;
-}
+    .settings_item div input {
+        width: 40px;
+        padding: 0px 0px !important;
+    }
 
 #shadows {
     position: relative;
