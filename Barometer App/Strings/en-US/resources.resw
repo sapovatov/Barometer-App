@@ -129,17 +129,29 @@
   <data name="detailInformation" xml:space="preserve">
     <value>Detail information</value>
   </data>
+  <data name="difference" xml:space="preserve">
+    <value>Difference of indicators:</value>
+  </data>
+  <data name="interval" xml:space="preserve">
+    <value>Check interval, min</value>
+  </data>
   <data name="lightingColor" xml:space="preserve">
     <value>Lighting color:</value>
   </data>
   <data name="noMark" xml:space="preserve">
     <value>There is no preasure mark</value>
   </data>
+  <data name="notificationsSettingsHeader" xml:space="preserve">
+    <value>NOTIFICATIONS SETTINGS</value>
+  </data>
   <data name="preasureMark" xml:space="preserve">
     <value>Preasure mark</value>
   </data>
   <data name="shadows" xml:space="preserve">
     <value>Shadows:</value>
+  </data>
+  <data name="showNotifications" xml:space="preserve">
+    <value>Show notifications: </value>
   </data>
   <data name="weatherForecast" xml:space="preserve">
     <value>Weather forecast</value>

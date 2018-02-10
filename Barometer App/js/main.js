@@ -67,7 +67,7 @@ jQuery(document).ready(function () {
                 jQuery("body").scrollLeft(jQuery("body").width() - e.distance);
             };
             if (e.type == "panend") {
-                if (direction == 2 && (e.distance >= (jQuery("body").width() * 0.3)) && !(jQuery(".lastTab").hasClass("activeTab"))) {
+                if ((direction == 2 && (e.distance >= (jQuery("body").width() * 0.3)) && !(jQuery(".lastTab").hasClass("activeTab"))) || (direction == 2 && !(jQuery(".lastTab").hasClass("activeTab")) && e.velocityX <= -1)) {
                     jQuery("body").scrollLeft(jQuery("body").width());
                     jQuery(".middleTab").removeClass("activeTab");
                     jQuery(".lastTab").addClass("activeTab");
@@ -75,7 +75,7 @@ jQuery(document).ready(function () {
                 else if (direction == 2 && (e.distance < (jQuery("body").width() * 0.3)) && !(jQuery(".lastTab").hasClass("activeTab"))) {
                     jQuery("body").scrollLeft(0);
                 }
-                else if (direction == 4 && (e.distance >= (jQuery("body").width() * 0.3)) && !(jQuery(".middleTab").hasClass("activeTab"))) {
+                else if ((direction == 4 && (e.distance >= (jQuery("body").width() * 0.3)) && !(jQuery(".middleTab").hasClass("activeTab"))) || (direction == 4 && !(jQuery(".middleTab").hasClass("activeTab")) && e.velocityX >= 1)) {
                     jQuery("body").scrollLeft(0);
                     jQuery(".lastTab").removeClass("activeTab");
                     jQuery(".middleTab").addClass("activeTab");
@@ -110,7 +110,7 @@ jQuery(document).ready(function () {
         jQuery("#settings_front").css({ "left": "0%", "transition": "left linear 250ms" });
         jQuery("#settings").css({ "visibility": "visible" });
         jQuery("#settings_btn span:first-of-type").css({ "top": "30%" });
-        jQuery("#settings_btn span:last-of-type").css({"top":"70%"});
+        jQuery("#settings_btn span:last-of-type").css({ "top": "70%" });
         mainPageManager.remove(pan);
         jQuery("#settings_back").one("click", function () {
             hide_settings();
@@ -118,7 +118,7 @@ jQuery(document).ready(function () {
     }
 
     function hide_settings() {
-        jQuery("#settings_front").css({ "left": "-50%", "transition": "left linear 250ms" });
+        jQuery("#settings_front").css({ "left": "-60%", "transition": "left linear 250ms" });
         jQuery("#settings").css({ "visibility": "hidden" });
         jQuery("#settings_btn span:first-of-type").css({ "top": "35%" });
         jQuery("#settings_btn span:last-of-type").css({"top":"65%"});
@@ -399,7 +399,12 @@ jQuery(document).ready(function () {
             jQuery("#main_page ul li:nth-of-type(3)>a").html(resourceLoader.getString('detailInformation'));
             jQuery(".settings_item:nth-of-type(1) label").html(resourceLoader.getString('backgroundColor'));
             jQuery(".settings_item:nth-of-type(2) label").html(resourceLoader.getString('lightingColor'));
-            jQuery(".settings_item:nth-of-type(3) label").html(resourceLoader.getString('shadows'));
+            jQuery(".settings_item:nth-of-type(3) label:first-of-type").html(resourceLoader.getString('shadows'));
+            jQuery(".settings_item:nth-of-type(4) label").html(resourceLoader.getString('notificationsSettingsHeader'));
+            jQuery(".settings_item:nth-of-type(5) label:first-of-type").html(resourceLoader.getString('showNotifications'));
+            jQuery(".settings_item:nth-of-type(6) label:first-of-type").html(resourceLoader.getString('difference'));
+            jQuery(".settings_item:nth-of-type(7) label:first-of-type").html(resourceLoader.getString('interval'));
+
             jQuery(".page_2_preasure h3").html(resourceLoader.getString('airPreasure'));
             jQuery(".page_2_mark h3").html(resourceLoader.getString('preasureMark'));
             jQuery(".page_2_forecast h3").html(resourceLoader.getString('weatherForecast'));

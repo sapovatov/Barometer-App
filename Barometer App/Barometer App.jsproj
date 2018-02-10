@@ -131,10 +131,10 @@
     <Content Include="Scripts\jquery-3.2.1.min.map" />
     <Content Include="Scripts\jquery-3.2.1.slim.js" />
     <Content Include="Scripts\jquery-3.2.1.slim.min.map" />
-    <PRIResource Include="Strings\uk-UA\resources.resw" />
     <PRIResource Include="Strings\ru-RU\resources.resw" />
     <PRIResource Include="Strings\en-US\resources.resw" />
     <None Include="Barometer App_TemporaryKey.pfx" />
+    <PRIResource Include="Strings\uk-UA\resources.resw" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Toolkit.Uwp.Notifications">

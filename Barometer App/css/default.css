@@ -1,5 +1,5 @@
 ﻿body {
-    /*touch-action: none;*/
+    touch-action: none;
     height: 100vh;
     width: 100vw;
     margin: 0;
@@ -8,7 +8,6 @@
     -webkit-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    background: #0f0;
     font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
 }
 
@@ -30,48 +29,41 @@ nav {
     list-style: none;
     padding: 0;
     margin: 0;
+    font-size: 12px;
 }
-
-    #tabs .tab {
-        float: left;
-        height: 36px;
-        width: 45%;
-        background: #000;
-    }
-
+#tabs .tab {
+    float: left;
+    height: 36px;
+    width: 45%;
+    background: #000;
+}
 .activeTab {
-    background: rgba(0, 0, 0, .25) !important;
+    background: rgba(255, 255, 255, .25) !important;
 }
-
-    .activeTab > a {
-        font-weight: bold;
-        text-shadow: 1px 1px 1px #333;
-    }
-
+.activeTab > a {
+    font-weight: bold;
+    text-shadow: 1px 1px 1px #333;
+}
 #tabs #settings_btn {
     position: relative;
     width: 10%;
 }
-
-    #tabs #settings_btn span {
-        position: absolute;
-        width: 30px;
-        height: 2px;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-        background: #fff;
-        transition: top linear 50ms;
-    }
-
-        #tabs #settings_btn span:first-of-type {
-            top: 35%;
-        }
-
-        #tabs #settings_btn span:last-of-type {
-            top: 65%;
-        }
-
+#tabs #settings_btn span {
+    position: absolute;
+    width: 60%;
+    height: 2px;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    transition: top linear 50ms;
+}
+#tabs #settings_btn span:first-of-type {
+    top: 35%;
+}
+#tabs #settings_btn span:last-of-type {
+    top: 65%;
+}
 #tabs .tab > a {
     display: block;
     height: 100%;
@@ -83,8 +75,6 @@ nav {
     padding: 0;
     margin: 0;
 }
-
-
 #settings {
     position: fixed;
     visibility: hidden;
@@ -94,7 +84,6 @@ nav {
     height: 100vh;
     z-index: 100;
 }
-
 #settings_back {
     width: 100%;
     height: 100%;
@@ -103,8 +92,8 @@ nav {
 #settings_front {
     position: absolute;
     top: 0;
-    left: -50%;
-    width: 50%;
+    left: -60%;
+    width: 60%;
     height: 100%;
     color: #fff;
     text-shadow: none;
@@ -114,25 +103,33 @@ nav {
     visibility: visible;
     transform: translate(0%, 0);
     transition: top ease-out 250ms;
+    font-size: 12px;
 }
 
-    #settings_front .settings_item {
-        padding: 10px 0px;
-        border-bottom: 1px dotted rgba(70, 70, 70, 1);
-    }
+#settingsWrapper {
+    width: 100%;
+    height: 90%;
+    overflow-y:auto;
+}
+#settings_front .settings_item {
+    padding: 10px 0px 10px 10px;
+    border-bottom: 1px dotted rgba(70, 70, 70, 1);
+}
 
-    #settings_front label:first-child {
-        display: inline-block;
-        margin: 0 !important;
-        padding: 0 !important;
-    }
+#settings_front label:first-child {
+    display: inline-block;
+    margin: 0 !important;
+    padding: 0 !important;
+}
 
 .settings_footer {
-    position: relative;
-    top: 75%;
-    transform: translate(0%, -100%);
+    position: fixed;
+    bottom: 0;
+    width: 82%;
     border-top: 1px dotted rgba(70, 70, 70, 1);
-    padding: 3% 0px;
+    padding: 3% 3%;
+    height: 10%;
+    font-size:12px;
 }
 
     .settings_footer span {
@@ -141,28 +138,86 @@ nav {
 
 .settings_item div {
     position: relative;
-    top: 0px;
+    top: -3px;
     float: right;
     width: 40px;
     height: 22px;
     right: 10px;
 }
-
-    .settings_item div input {
-        width: 40px;
-        padding: 0px 0px !important;
-    }
-
-#shadows {
+.settings_item div input {
+    width: 40px;
+    padding: 0px 0px !important;
+}
+.settings_item:nth-of-type(4) {
+    margin-top: 40px;
+}
+.settings_item:nth-of-type(6) input, .settings_item:nth-of-type(7) input {
     position: relative;
-    height: 20px !important;
-    width: 20px !important;
-    right: 15px !important;
-    top: -2px !important;
-    opacity: 1;
+    right: 8px;
+    width: 38px;
     float: right;
+    background: #ccc;
+    border: none;
+    text-align: center;
+}
+    /*switch*/
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 40px;
+        height: 20px;
+        float: right;
+        right: 8px;
+    }
+.switch input {
+    display: none;
+}
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    -webkit-transition: .4s;
+    transition: .4s;
 }
 
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 12px;
+    width: 12px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: #2196F3;
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(20px);
+    -ms-transform: translateX(20px);
+    transform: translateX(20px);
+}
+
+/* Rounded sliders */
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
 
 #page_1, #page_2 {
     width: 100vw;
