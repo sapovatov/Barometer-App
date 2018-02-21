@@ -4,10 +4,12 @@ jQuery(document).ready(function () {
 
     var resourceLoader = new Windows.ApplicationModel.Resources.ResourceLoader();
     var applicationData = Windows.Storage.ApplicationData.current.localSettings;
-
+    applicationData.values["dirrerence"] = jQuery("#difference").val();
+    applicationData.values["interval"] = jQuery("#interval").val();
     var window_height = jQuery(window).height();
     var light_color = "#0077ff";
     var main_arrow = jQuery("#Main");
+
     jQuery("#lighting_color").val(light_color);
     reposition(1);
     //positioning
@@ -91,7 +93,6 @@ jQuery(document).ready(function () {
             if (e.type == "panend") {
                 if (e.distance >= (jQuery("#settings_front").width() * 0.3)) {
                     show_settings();
-
                 }
                 else {
                     hide_settings();
@@ -108,7 +109,7 @@ jQuery(document).ready(function () {
     });
     function show_settings() {
         jQuery("#settings_front").css({ "left": "0%", "transition": "left linear 250ms" });
-        jQuery("#settings").css({ "visibility": "visible" });
+        jQuery("#settings").css({ "visibility": "visible"});
         jQuery("#settings_btn span:first-of-type").css({ "top": "30%" });
         jQuery("#settings_btn span:last-of-type").css({ "top": "70%" });
         mainPageManager.remove(pan);
@@ -116,15 +117,13 @@ jQuery(document).ready(function () {
             hide_settings();
         });
     }
-
     function hide_settings() {
         jQuery("#settings_front").css({ "left": "-60%", "transition": "left linear 250ms" });
         jQuery("#settings").css({ "visibility": "hidden" });
         jQuery("#settings_btn span:first-of-type").css({ "top": "35%" });
-        jQuery("#settings_btn span:last-of-type").css({"top":"65%"});
-            mainPageManager.add(pan);
+        jQuery("#settings_btn span:last-of-type").css({ "top": "65%" });
+        mainPageManager.add(pan);
     };
-
     jQuery("#settings_btn").on("click", function () {
         show_settings();
     });
@@ -140,8 +139,71 @@ jQuery(document).ready(function () {
             jQuery(".middleTab").removeClass("activeTab");
         };
     });
+    //------------------------------INTERFACE SETTINGS---------------------------------------
+    jQuery("#background_color").change(function (e) {
+        jQuery("body").attr("style", "background: " + this.value + " !important");
+        applicationData.values["background_color"] = this.value;
+    });
+    jQuery("#lighting_color").change(function (e) {
+        jQuery("#statistic_arrow").css({ "borderBottomColor": this.value });
+        jQuery("#lighting").css({ "boxShadow": "inset 0px 0px 5px 3px" + this.value });
+        light_color = this.value;
+        applicationData.values["lighting_color"] = this.value;
+    });
+    jQuery("#shadows").on("click", function () {
+        if (jQuery(this).is(":checked")) {
+            jQuery("#button").css({ "filter": "drop-shadow(10px 10px 3px rgba(0, 0, 0, .25))" });
+            applicationData.values["shadows"] = true;
+        }
+        else {
+            jQuery("#button").css({ "filter": "none" });
+            applicationData.values.remove("shadows");
+        }
+    });
 
-    //barometer part
+    //-------------------------------NOTIFICATION SETTINGS--------------------------------------
+
+    if (applicationData.values["showNotifications"]) {
+        jQuery("#notifications").prop("checked", true);
+    };
+    if(applicationData.values["tileNotifications"]){
+        jQuery("#tileNotifications").prop("checked", true);
+    };
+
+    jQuery("#notifications").on("click", function () {
+        if (jQuery(this).is(":checked")) {
+            applicationData.values["showNotifications"] = true;
+            notificationsRegistration();
+        }
+        else {
+            applicationData.values.remove("showNotifications");
+            notificationsUnregister();
+        }
+    });
+    jQuery("#tileNotifications").on("click", function () {
+        if (jQuery(this).is(":checked")) {
+            applicationData.values["tileNotifications"] = true;
+        }
+        else {
+            applicationData.values.remove("tileNotifications");
+            Windows.UI.Notifications.TileUpdateManager.createTileUpdaterForApplication().clear();
+        }
+    });
+    jQuery("#defference").on("blur", function () {
+        if (jQuery(this).val() > jQuery(this).attr("max")) {
+            jQuery(this).val(jQuery(this).attr("max"));
+        }
+        else if (jQuery(this).val() < jQuery(this).attr("min")) {
+            jQuery(this).val(jQuery(this).attr("min"));
+        }
+        applicationData.values["dirrerence"] = jQuery(this).val();
+    });
+    jQuery("#interval").on("change", function () {
+        applicationData.values["interval"] = jQuery(this).val();
+        settingsChanged();
+    });
+
+    //-------------------------------------barometer part----------------------------------------
     var desiredReportIntervalMs;
     var barometer;
     var barometer_value;
@@ -154,7 +216,7 @@ jQuery(document).ready(function () {
         desiredReportIntervalMs = minReportIntervalMs > 1000 ? minReportIntervalMs : 1000;
 
         function barometer_refresh() {
-            if (jQuery("#main_page").hasClass("ui-page-active")) {
+            if (jQuery(".middleTab").hasClass("activeTab")) {
                 // Re-enable sensor input. No need to restore the desired desiredReportIntervalMs (it is restored for us upon app resume)
                 barometer.addEventListener("readingchanged", onBarometerDataChanged);
             } else {
@@ -166,16 +228,25 @@ jQuery(document).ready(function () {
     }
     else {
         console.log("No barometer!");
-    }
+    };
     function onBarometerDataChanged(e) {
         var reading = e.reading;
         barometer_value = e.reading.stationPressureInHectopascals.toFixed(2);
 
         rotation(jQuery("#main_arrow"), ((barometer_value - 1010) * 2.43), 1, 1);
-        details_page();
+        details_page();        
+    };
+    //-----------------------------------------------virtual preassure mark---------------------------------
+    function virtualPreassureMark() {
+        var currentTime = new Date().getTime();
+        if (!(applicationData.values["virtualMarkTime"]) || currentTime - applicationData.values["virtualMarkTime"] >= 12 * 60 * 60 * 1000) {
+            applicationData.values["virtualMarkValue"] = Math.round(barometer_value/ 1.33322387415;
+            applicationData.values["virtualMarkTime"] = new Date().getTime();
+        }
     }
+    virtualPreassureMark();
+    //-------------------------------------------------------------------------------------------------------
     function rotation(element, r_value, speed, type) {
-
         if (type == 1) {
             jQuery(element).css({ "transform": "rotate(" + r_value + "deg) translate(-50%, -50%)", "transition": "all cubic-bezier(0.175, 0.885, 0.32, 1.275) " + speed + "s" });
         }
@@ -185,22 +256,18 @@ jQuery(document).ready(function () {
         else {
             jQuery(element).css({ "transform": "rotate(" + r_value + "deg) translate(-50%, -50%)", "transition": "transform linear " + speed + "s" });
         }
-
-    }
-
+    };
     function control_mark() {
         var date = new Date();
         var mark_day;
         var mark_month;
         var mark_hours;
         var mark_minutes; 
-
         var storage_day;
         var storage_month; 
         var storage_hour;
         var storage_minute;
         var storage_preasure;
-
 
         this.update_date = function () {
             date = new Date();
@@ -314,49 +381,44 @@ jQuery(document).ready(function () {
             hour = (storage_hour <= 9) ?"0" + storage_hour : storage_hour;
             minute = (storage_minute <= 9) ?"0" + storage_minute : storage_minute;
             if (applicationData.values["mark_day"]) {
-                jQuery(".page_2_mark span:last-of-type").html(Math.round(storage_preasure / 1.33322387415) + " mmHg &nbsp;&nbsp;" +day+ "." +month+ " " +hour+":"+minute);
+                jQuery(".page_2_mark span:last-of-type").html(Math.round(storage_preasure / 1.33322387415) + " " + resourceLoader.getString('mmHg')+"&nbsp;&nbsp;" +day+ "." +month+ " " +hour+":"+minute);
             }
             else {
                 jQuery(".page_2_mark span:last-of-type").html(resourceLoader.getString('noMark'));
             }
             jQuery(".page_2_preasure span:first-of-type").html(barometer_value + " hPa ")
-            jQuery(".page_2_preasure span:last-of-type").html(Math.round(barometer_value / 1.33322387415) + " mmHg");
+            jQuery(".page_2_preasure span:last-of-type").html(Math.round(barometer_value / 1.33322387415) + " " + resourceLoader.getString('mmHg'));
         };
     };
 
     var set_remove_mark = new control_mark();
     var mark_set = set_remove_mark.check();
     set_remove_mark.start();
-
     function details_page() {
         set_remove_mark.details();
     };
 
-    jQuery("#button").on("vmousedown", function (e) {
+    var barometerButton = document.getElementById("button");
+    var barometerButtonManager = new Hammer.Manager(barometerButton);
+
+    barometerButtonManager.add(new Hammer.Tap());
+    barometerButtonManager.add(new Hammer.Press());
+
+    barometerButtonManager.on("tap", function () {
         if (!mark_set) {
             set_remove_mark.tap();
         }
         mark_set = set_remove_mark.check();
     });
-    jQuery("#button").on("taphold", function (e) {
+
+    barometerButtonManager.on("press", function () {
         if (mark_set) {
             set_remove_mark.taphold();
         }
         mark_set = set_remove_mark.check();
     });
 
-    jQuery("#background_color").change(function (e) {
-        jQuery("body").attr("style", "background: " + this.value + " !important");
-        applicationData.values["background_color"] =  this.value;
-    });
-
-    jQuery("#lighting_color").change(function (e) {
-        jQuery("#statistic_arrow").css({ "borderBottomColor": this.value });
-        jQuery("#lighting").css({ "boxShadow": "inset 0px 0px 5px 3px" + this.value });
-        light_color = this.value;
-        applicationData.values["lighting_color"] = this.value;
-    });
-
+    //------------------------------------footer--------------------------------------------
     var package = Windows.ApplicationModel.Package.current;
     var packageId = package.id;
     var version = packageId.version;
@@ -367,24 +429,13 @@ jQuery(document).ready(function () {
         barometer_refresh();
         i = 0;
     });
-    jQuery("#shadows").on("click", function () {
-        if (jQuery(this).is(":checked")) {
-            jQuery("#button").css({ "filter": "drop-shadow(10px 10px 3px rgba(0, 0, 0, .25))" });
-            applicationData.values["shadows"] =  true;
-        }
-        else {
-            jQuery("#button").css({ "filter": "none" });
-            applicationData.values.remove("shadows");
-        }
-    });
 
-    //language part
+    //------------------------------------------language part---------------------------------------
 
     var topUserLanguage = Windows.System.UserProfile.GlobalizationPreferences.languages[0];
     var language = new Windows.Globalization.Language(topUserLanguage);
     var languageName = language.languageTag;
     var lang;
-
     if (languageName == "ru" || languageName == "ua") {
         jQuery("#months").addClass("months_ru");
         lang = "ru";
@@ -404,7 +455,7 @@ jQuery(document).ready(function () {
             jQuery(".settings_item:nth-of-type(5) label:first-of-type").html(resourceLoader.getString('showNotifications'));
             jQuery(".settings_item:nth-of-type(6) label:first-of-type").html(resourceLoader.getString('difference'));
             jQuery(".settings_item:nth-of-type(7) label:first-of-type").html(resourceLoader.getString('interval'));
-
+            jQuery(".settings_item:nth-of-type(8) label:first-of-type").html(resourceLoader.getString('tileNotifications'));
             jQuery(".page_2_preasure h3").html(resourceLoader.getString('airPreasure'));
             jQuery(".page_2_mark h3").html(resourceLoader.getString('preasureMark'));
             jQuery(".page_2_forecast h3").html(resourceLoader.getString('weatherForecast'));
@@ -414,128 +465,98 @@ jQuery(document).ready(function () {
 
     /*-----------------------------------------------BACKGROUND TASKS--------------------------------------*/
 
-    /*registration (Main)*/
+    var startRegistration = setTimeout(function () {
+        mainTaskRegistration();
+    }, 1000);
 
+    function settingsChanged() {
+        mainTaskUnregister();
+        setTimeout(function () {
+            mainTaskRegistration();
+        }, 1000);
+    };
+
+    /*registration (Main)*/
     var taskRegistered = false;
     var exampleTaskName = "barometerBackgroundTask";
     var background = Windows.ApplicationModel.Background;
-
-    var iter1 = background.BackgroundTaskRegistration.allTasks.first();
-
-    var trigger = new Windows.ApplicationModel.Background.TimeTrigger(15, false);
-
-    while (iter1.hasCurrent) {
-
-        var task1 = iter1.current.value;
-
-        if (task1.name === exampleTaskName) {
-            console.log(task1.name);
-            taskRegistered = true;
-            break;
+    function mainTaskRegistration() {
+        var iter1 = background.BackgroundTaskRegistration.allTasks.first();
+        var triggerInterval = jQuery("#interval").val();
+        var trigger = new Windows.ApplicationModel.Background.TimeTrigger(triggerInterval, false);
+        while (iter1.hasCurrent) {
+            var task1 = iter1.current.value;
+            if (task1.name === exampleTaskName) {
+                taskRegistered = true;
+                break;
+            }
+            iter1.moveNext();
         }
-
-        iter1.moveNext();
-    }
-    jQuery(".page_2_forecast span").html("start: " + taskRegistered);
-
-    jQuery(".page_2_preasure span:first-of-type").on("click", function () {
-
-
         if (taskRegistered != true) {
             var access = background.BackgroundExecutionManager.requestAccessAsync().done(function (result) {
-
-                var builder = new Windows.ApplicationModel.Background.BackgroundTaskBuilder();
-
-                               
+                var builder = new Windows.ApplicationModel.Background.BackgroundTaskBuilder();              
                 builder.name = exampleTaskName;
                 builder.taskEntryPoint = "js\\barometerBackgroundTask.js";
                 builder.setTrigger(trigger);
-
                 var task = builder.register();
-
                 taskRegistered = true;
-                console.log("async:" + result);
-                jQuery(".page_2_forecast span").html("reg: " + taskRegistered);
-
             });
         }
-        console.log("register" + " " +Windows.ApplicationModel.Background.BackgroundExecutionManager.getAccessStatus());
-    });
+    };
 
-    jQuery(".page_2_preasure span:last-of-type").on("click", function () {
-
-        var iter = background.BackgroundTaskRegistration.allTasks.first();
-        while (iter.hasCurrent) {
-
-            var task = iter.current.value;
-
+    function mainTaskUnregister() {
+        var iter2 = background.BackgroundTaskRegistration.allTasks.first();
+        while (iter2.hasCurrent) {
+            var task = iter2.current.value;
             if (task.name === exampleTaskName) {
-                console.log("unregister:"+task.name);
                 task.unregister(true);
                 taskRegistered = false;
-                jQuery(".page_2_forecast span").html("unreg: "+taskRegistered);
                 break;
             }
-
-            iter.moveNext();
+            iter2.moveNext();
         }
-    });
+    };
 
     /*registration (Toast)*/
 
     var taskRegistered2 = false;
     var exampleTaskName2 = "barometerBackgroundToastTask";
     var background2 = Windows.ApplicationModel.Background;
-
-
-    var iter2 = background.BackgroundTaskRegistration.allTasks.first();
-
-    var trigger2 = new Windows.ApplicationModel.Background.ToastNotificationActionTrigger();
-
-    while (iter2.hasCurrent) {
-
-        var task2 = iter2.current.value;
-
-        if (task2.name === exampleTaskName2) {
-            taskRegistered2 = true;
-            break;
+    function notificationsRegistration() {
+        var iter3 = background.BackgroundTaskRegistration.allTasks.first();
+        var trigger2 = new Windows.ApplicationModel.Background.ToastNotificationActionTrigger();
+        while (iter3.hasCurrent) {
+            var task2 = iter3.current.value;
+            if (task2.name === exampleTaskName2) {
+                taskRegistered2 = true;
+                break;
+            }
+            iter3.moveNext();
         }
-
-        iter2.moveNext();
-    }
-
-    if (taskRegistered2 != true) {
-        var access2 = background.BackgroundExecutionManager.requestAccessAsync().done(function (result) {
-
-            var builder2 = new Windows.ApplicationModel.Background.BackgroundTaskBuilder();
-
-
-            builder2.name = exampleTaskName2;
-            builder2.taskEntryPoint = "js\\barometerBackgroundTask.js";
-            builder2.setTrigger(trigger2);
-
-            var task2 = builder2.register();
-
-            taskRegistered2 = true;
-
-        });
-    }
-/*
-    var iter2 = background.BackgroundTaskRegistration.allTasks.first();
-    while (iter2.hasCurrent) {
-
-        var task2 = iter.current.value;
-
-        if (task2.name === exampleTaskName) {
-            console.log("unregister:" + task.name);
-            task2.unregister(true);
-            taskRegistered2 = false;
-            break;
+        if (taskRegistered2 != true) {
+            var access2 = background.BackgroundExecutionManager.requestAccessAsync().done(function (result) {
+                var builder2 = new Windows.ApplicationModel.Background.BackgroundTaskBuilder();
+                builder2.name = exampleTaskName2;
+                builder2.taskEntryPoint = "js\\barometerBackgroundTask.js";
+                builder2.setTrigger(trigger2);
+                var task2 = builder2.register();
+                taskRegistered2 = true;
+            });
         }
+    };
+    function notificationsUnregister() {
+        var iter4 = background.BackgroundTaskRegistration.allTasks.first();
+        while (iter4.hasCurrent) {
+            var task3 = iter4.current.value;
+            if (task3.name === exampleTaskName2) {
+                task3.unregister(true);
+                taskRegistered2 = false;
+                break;
+            }
+            iter4.moveNext();
+        }
+    };
 
-        iter2.moveNext();
-    }
-    */
     //-----------------------------------CLEAR BADGE--------------------------------
     var badgeUpdater = Windows.UI.Notifications.BadgeUpdateManager.createBadgeUpdaterForApplication();
     badgeUpdater.clear();

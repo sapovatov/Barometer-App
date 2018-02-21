@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="airPreasure" xml:space="preserve">
-    <value>Air preasure</value>
+    <value>Air preassure</value>
   </data>
   <data name="backgroundColor" xml:space="preserve">
     <value>Background color: </value>
@@ -126,11 +126,20 @@
   <data name="barometer" xml:space="preserve">
     <value>Barometer</value>
   </data>
+  <data name="current" xml:space="preserve">
+    <value>Current: </value>
+  </data>
   <data name="detailInformation" xml:space="preserve">
     <value>Detail information</value>
   </data>
   <data name="difference" xml:space="preserve">
     <value>Difference of indicators:</value>
+  </data>
+  <data name="downfall" xml:space="preserve">
+    <value>Downfall!</value>
+  </data>
+  <data name="forecast" xml:space="preserve">
+    <value>Forecast: </value>
   </data>
   <data name="interval" xml:space="preserve">
     <value>Check interval, min</value>
@@ -138,20 +147,47 @@
   <data name="lightingColor" xml:space="preserve">
     <value>Lighting color:</value>
   </data>
+  <data name="maybeDownfall" xml:space="preserve">
+    <value>Maybe downfall!</value>
+  </data>
+  <data name="mmHg" xml:space="preserve">
+    <value>mmHg</value>
+  </data>
+  <data name="noDownfall" xml:space="preserve">
+    <value>No downfall</value>
+  </data>
   <data name="noMark" xml:space="preserve">
     <value>There is no preasure mark</value>
   </data>
   <data name="notificationsSettingsHeader" xml:space="preserve">
     <value>NOTIFICATIONS SETTINGS</value>
   </data>
+  <data name="preassure" xml:space="preserve">
+    <value>Preassure:</value>
+  </data>
   <data name="preasureMark" xml:space="preserve">
-    <value>Preasure mark</value>
+    <value>Preassure mark</value>
   </data>
   <data name="shadows" xml:space="preserve">
     <value>Shadows:</value>
   </data>
   <data name="showNotifications" xml:space="preserve">
     <value>Show notifications: </value>
+  </data>
+  <data name="tempDown" xml:space="preserve">
+    <value>Temperature will down</value>
+  </data>
+  <data name="tempUp" xml:space="preserve">
+    <value>Temperature will rise</value>
+  </data>
+  <data name="tileNotifications" xml:space="preserve">
+    <value>Tile information:</value>
+  </data>
+  <data name="was" xml:space="preserve">
+    <value>Was: </value>
+  </data>
+  <data name="weatherChange" xml:space="preserve">
+    <value>Expected weather change</value>
   </data>
   <data name="weatherForecast" xml:space="preserve">
     <value>Weather forecast</value>

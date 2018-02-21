@@ -126,11 +126,20 @@
   <data name="barometer" xml:space="preserve">
     <value>Барометр</value>
   </data>
+  <data name="current" xml:space="preserve">
+    <value>Сейчас: </value>
+  </data>
   <data name="detailInformation" xml:space="preserve">
     <value>Детальная информация</value>
   </data>
   <data name="difference" xml:space="preserve">
     <value>Разница показателей, ммРт:</value>
+  </data>
+  <data name="downfall" xml:space="preserve">
+    <value>Осадки!</value>
+  </data>
+  <data name="forecast" xml:space="preserve">
+    <value>Прогноз: </value>
   </data>
   <data name="interval" xml:space="preserve">
     <value>Интервал проверки, мин:</value>
@@ -138,11 +147,23 @@
   <data name="lightingColor" xml:space="preserve">
     <value>Цвет подстветки: </value>
   </data>
+  <data name="maybeDownfall" xml:space="preserve">
+    <value>Возможны осадки!</value>
+  </data>
+  <data name="mmHg" xml:space="preserve">
+    <value>ммРт.</value>
+  </data>
+  <data name="noDownfall" xml:space="preserve">
+    <value>Без осадков</value>
+  </data>
   <data name="noMark" xml:space="preserve">
     <value>Метка давления не установлена</value>
   </data>
   <data name="notificationsSettingsHeader" xml:space="preserve">
     <value>НАСТРОЙКИ УВЕДОМЛЕНИЙ</value>
+  </data>
+  <data name="preassure" xml:space="preserve">
+    <value>Давление:</value>
   </data>
   <data name="preasureMark" xml:space="preserve">
     <value>Метка давления</value>
@@ -152,6 +173,21 @@
   </data>
   <data name="showNotifications" xml:space="preserve">
     <value>Показывать уведомления:</value>
+  </data>
+  <data name="tempDown" xml:space="preserve">
+    <value>Температура будет понижаться</value>
+  </data>
+  <data name="tempUp" xml:space="preserve">
+    <value>Температура будет повышаться</value>
+  </data>
+  <data name="tileNotifications" xml:space="preserve">
+    <value>Информация на плитке: </value>
+  </data>
+  <data name="was" xml:space="preserve">
+    <value>Было: </value>
+  </data>
+  <data name="weatherChange" xml:space="preserve">
+    <value>Ожидается изменение погоды</value>
   </data>
   <data name="weatherForecast" xml:space="preserve">
     <value>Прогноз погоды</value>

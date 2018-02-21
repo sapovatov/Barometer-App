@@ -153,6 +153,9 @@
   <data name="showNotifications" xml:space="preserve">
     <value>Показывать уведомления:</value>
   </data>
+  <data name="tileNotifications" xml:space="preserve">
+    <value>Информация на плитке: </value>
+  </data>
   <data name="weatherForecast" xml:space="preserve">
     <value>Прогноз погоды</value>
   </data>
