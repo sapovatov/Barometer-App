@@ -4,6 +4,7 @@
     width: 100vw;
     margin: 0;
     padding: 0;
+    background-color: #000;
     -moz-user-select: none;
     -webkit-user-select: none;
     -ms-user-select: none;
@@ -257,7 +258,7 @@ input:checked + .slider:before {
 .page_2_section:nth-of-type(n+2) {
     border-top: 1px solid #fff;
 }
-.page_2_preasure span {
+.page_2_preasure span, .page_2_forecast span {
     display: block;
 }
 #barometer {

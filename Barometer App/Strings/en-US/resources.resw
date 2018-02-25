@@ -126,6 +126,9 @@
   <data name="barometer" xml:space="preserve">
     <value>Barometer</value>
   </data>
+  <data name="clear" xml:space="preserve">
+    <value>Clear</value>
+  </data>
   <data name="current" xml:space="preserve">
     <value>Current: </value>
   </data>

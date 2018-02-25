@@ -4,8 +4,6 @@ jQuery(document).ready(function () {
 
     var resourceLoader = new Windows.ApplicationModel.Resources.ResourceLoader();
     var applicationData = Windows.Storage.ApplicationData.current.localSettings;
-    applicationData.values["dirrerence"] = jQuery("#difference").val();
-    applicationData.values["interval"] = jQuery("#interval").val();
     var window_height = jQuery(window).height();
     var light_color = "#0077ff";
     var main_arrow = jQuery("#Main");
@@ -73,6 +71,7 @@ jQuery(document).ready(function () {
                     jQuery("body").scrollLeft(jQuery("body").width());
                     jQuery(".middleTab").removeClass("activeTab");
                     jQuery(".lastTab").addClass("activeTab");
+                    clearNotifications();
                 }
                 else if (direction == 2 && (e.distance < (jQuery("body").width() * 0.3)) && !(jQuery(".lastTab").hasClass("activeTab"))) {
                     jQuery("body").scrollLeft(0);
@@ -137,6 +136,7 @@ jQuery(document).ready(function () {
         if (!(jQuery(this).hasClass("activeTab"))) {
             jQuery(this).addClass("activeTab");
             jQuery(".middleTab").removeClass("activeTab");
+            clearNotifications();
         };
     });
     //------------------------------INTERFACE SETTINGS---------------------------------------
@@ -169,7 +169,6 @@ jQuery(document).ready(function () {
     if(applicationData.values["tileNotifications"]){
         jQuery("#tileNotifications").prop("checked", true);
     };
-
     jQuery("#notifications").on("click", function () {
         if (jQuery(this).is(":checked")) {
             applicationData.values["showNotifications"] = true;
@@ -190,10 +189,10 @@ jQuery(document).ready(function () {
         }
     });
     jQuery("#defference").on("blur", function () {
-        if (jQuery(this).val() > jQuery(this).attr("max")) {
+        if (jQuery(this).val() > Number(jQuery(this).attr("max"))) {
             jQuery(this).val(jQuery(this).attr("max"));
         }
-        else if (jQuery(this).val() < jQuery(this).attr("min")) {
+        else if (jQuery(this).val() < Number(jQuery(this).attr("min"))) {
             jQuery(this).val(jQuery(this).attr("min"));
         }
         applicationData.values["dirrerence"] = jQuery(this).val();
@@ -226,9 +225,6 @@ jQuery(document).ready(function () {
         }
         barometer_refresh();
     }
-    else {
-        console.log("No barometer!");
-    };
     function onBarometerDataChanged(e) {
         var reading = e.reading;
         barometer_value = e.reading.stationPressureInHectopascals.toFixed(2);
@@ -236,15 +232,6 @@ jQuery(document).ready(function () {
         rotation(jQuery("#main_arrow"), ((barometer_value - 1010) * 2.43), 1, 1);
         details_page();        
     };
-    //-----------------------------------------------virtual preassure mark---------------------------------
-    function virtualPreassureMark() {
-        var currentTime = new Date().getTime();
-        if (!(applicationData.values["virtualMarkTime"]) || currentTime - applicationData.values["virtualMarkTime"] >= 12 * 60 * 60 * 1000) {
-            applicationData.values["virtualMarkValue"] = Math.round(barometer_value/ 1.33322387415;
-            applicationData.values["virtualMarkTime"] = new Date().getTime();
-        }
-    }
-    virtualPreassureMark();
     //-------------------------------------------------------------------------------------------------------
     function rotation(element, r_value, speed, type) {
         if (type == 1) {
@@ -304,10 +291,6 @@ jQuery(document).ready(function () {
                 rotation(jQuery("#statistic_arrow"), ((barometer_value - 1010) * 2.43), 3, 1);
                 jQuery("#statistic_arrow").css({ "opacity": "1" });
             }
-            else {
-                console.log("Date is already marked!!!");
-            }
-
         };
         this.taphold = function () {
             
@@ -328,9 +311,6 @@ jQuery(document).ready(function () {
                 jQuery(".page_2_mark span:last-of-type").css({ "color": "#fff" });
 
             }
-            else {
-                console.log("Date is already removed!!!");
-            };
         };
         this.start = function () {
 
@@ -366,9 +346,12 @@ jQuery(document).ready(function () {
                 rotation(jQuery("#statistic_arrow"), ((storage_preasure - 1010) * 2.43), 0, 3);
                 jQuery("#statistic_arrow").css({ "opacity": "1" });
             }
-            else {
-                console.log("Storage have no data!!!");
-            } 
+            if (applicationData.values["dirrerence"]){
+                jQuery("#defference").val(applicationData.values["dirrerence"]);
+            }
+            if (applicationData.values["interval"]){
+                jQuery("#interval").val(applicationData.values["interval"]);
+            }
         };
         this.details = function () {
             storage_day = applicationData.values["mark_day"];
@@ -388,6 +371,8 @@ jQuery(document).ready(function () {
             }
             jQuery(".page_2_preasure span:first-of-type").html(barometer_value + " hPa ")
             jQuery(".page_2_preasure span:last-of-type").html(Math.round(barometer_value / 1.33322387415) + " " + resourceLoader.getString('mmHg'));
+            jQuery(".page_2_forecast span:first-of-type").html(applicationData.values["tempForecast"]);
+            jQuery(".page_2_forecast span:last-of-type").html(applicationData.values["downfallForecast"]);
         };
     };
 
@@ -445,7 +430,6 @@ jQuery(document).ready(function () {
     }
     translate();
     function translate() {
-        
             jQuery("#main_page ul li:nth-of-type(2)>a").html(resourceLoader.getString('barometer'));
             jQuery("#main_page ul li:nth-of-type(3)>a").html(resourceLoader.getString('detailInformation'));
             jQuery(".settings_item:nth-of-type(1) label").html(resourceLoader.getString('backgroundColor'));
@@ -459,15 +443,13 @@ jQuery(document).ready(function () {
             jQuery(".page_2_preasure h3").html(resourceLoader.getString('airPreasure'));
             jQuery(".page_2_mark h3").html(resourceLoader.getString('preasureMark'));
             jQuery(".page_2_forecast h3").html(resourceLoader.getString('weatherForecast'));
-
-       
     }
 
     /*-----------------------------------------------BACKGROUND TASKS--------------------------------------*/
 
     var startRegistration = setTimeout(function () {
-        mainTaskRegistration();
-    }, 1000);
+        mainTaskRegistration(); 
+    }, 3000);
 
     function settingsChanged() {
         mainTaskUnregister();
@@ -523,7 +505,7 @@ jQuery(document).ready(function () {
     var exampleTaskName2 = "barometerBackgroundToastTask";
     var background2 = Windows.ApplicationModel.Background;
     function notificationsRegistration() {
-        var iter3 = background.BackgroundTaskRegistration.allTasks.first();
+        var iter3 = background2.BackgroundTaskRegistration.allTasks.first();
         var trigger2 = new Windows.ApplicationModel.Background.ToastNotificationActionTrigger();
         while (iter3.hasCurrent) {
             var task2 = iter3.current.value;
@@ -534,7 +516,7 @@ jQuery(document).ready(function () {
             iter3.moveNext();
         }
         if (taskRegistered2 != true) {
-            var access2 = background.BackgroundExecutionManager.requestAccessAsync().done(function (result) {
+            var access2 = background2.BackgroundExecutionManager.requestAccessAsync().done(function (result) {
                 var builder2 = new Windows.ApplicationModel.Background.BackgroundTaskBuilder();
                 builder2.name = exampleTaskName2;
                 builder2.taskEntryPoint = "js\\barometerBackgroundTask.js";
@@ -556,17 +538,134 @@ jQuery(document).ready(function () {
             iter4.moveNext();
         }
     };
-
+    
     //-----------------------------------CLEAR BADGE--------------------------------
-    var badgeUpdater = Windows.UI.Notifications.BadgeUpdateManager.createBadgeUpdaterForApplication();
-    badgeUpdater.clear();
 
+    function clearNotifications() {
+        var badgeUpdater = Windows.UI.Notifications.BadgeUpdateManager.createBadgeUpdaterForApplication();
+        badgeUpdater.clear();
+        Windows.UI.Notifications.ToastNotificationManager.history.clear();
+    }
     //----------------------------------TOAST ACTIONS----------------------------------
     Windows.UI.WebUI.WebUIApplication.addEventListener("activated", onActivated);
     function onActivated(e) {
-        console.log("action: " + e.argument);
+        if (e.argument == "viewDetails") {
+            jQuery(".lastTab").click();
+            jQuery("body").scrollLeft(jQuery("body").width());
+        }
         
     };
-    
+    //-----------------------------------------------virtual preassure mark---------------------------------
+    if (applicationData.values["tileNotifications"]) {
+        var dateMark = new Date();
+        var notifLib = Microsoft.Toolkit.Uwp.Notifications;
+        function virtualPreassureMark() {
+            var currentTime = dateMark.getTime();
+            if (!(applicationData.values["virtualMarkTime"]) || currentTime - applicationData.values["virtualMarkTime"] >= 12 * 60 * 60 * 1000) {
+                applicationData.values["virtualMarkValue"] = barometer_value;
+                applicationData.values["virtualMarkTime"] = currentTime;
+                applicationData.values["virtualMarkHoursMinutes"] = hours + ":" + minutes;
+            }
+        }
+        virtualPreassureMark();
+        //------------------------------------------------------tile update--------------------------------------
+        Windows.UI.Notifications.TileUpdateManager.createTileUpdaterForApplication().clear();
+        var tile1 = {
+            string_1: resourceLoader.getString("preassure"),
+            string_2: resourceLoader.getString("current") + barometer_value + resourceLoader.getString('mmHg'),
+            string_3: resourceLoader.getString("was") + applicationData.values["virtualMarkValue"] + resourceLoader.getString('mmHg') + "(" + applicationData.values["virtualMarkHoursMinutes"] + ")"
+        };
+        showNotification(tile1.string_1, tile1.string_2, tile1.string_3);
+        function showNotification(string_1, string_2, string_3) {
 
+            //medium
+            var tileContent = new notifLib.TileContent();
+            var tileVisual = new notifLib.TileVisual();
+            var tileBinding = new notifLib.TileBinding();
+            var tileBindingContentAdaptive = new notifLib.TileBindingContentAdaptive();
+
+            var adaptiveGroup = new notifLib.AdaptiveGroup();
+
+            var adaptiveSubgroup = new notifLib.AdaptiveSubgroup();
+
+            var adaptiveText = new notifLib.AdaptiveText();
+            adaptiveText.text = string_1;
+            adaptiveText.hintStyle = notifLib.AdaptiveTextStyle.caption;
+            adaptiveSubgroup.children.push(adaptiveText);
+
+            adaptiveText = new notifLib.AdaptiveText();
+            adaptiveText.text = string_2;
+            adaptiveText.hintStyle = notifLib.AdaptiveTextStyle.captionSubtle;
+            //adaptiveText.hintWrap = true;
+            adaptiveSubgroup.children.push(adaptiveText);
+
+            adaptiveText = new notifLib.AdaptiveText();
+            adaptiveText.text = string_3;
+            adaptiveText.hintStyle = notifLib.AdaptiveTextStyle.captionSubtle;
+            //adaptiveText.hintWrap = true;
+            adaptiveSubgroup.children.push(adaptiveText);
+
+            adaptiveGroup.children.push(adaptiveSubgroup);
+
+            tileBindingContentAdaptive.children.push(adaptiveGroup);
+
+            tileBinding.content = tileBindingContentAdaptive;
+
+            tileBinding.branding = notifLib.TileBranding.name;
+            tileVisual.tileMedium = tileBinding;
+
+            //wide
+            tileBinding = new notifLib.TileBinding();
+            tileBindingContentAdaptive = new notifLib.TileBindingContentAdaptive();
+
+            adaptiveGroup = new notifLib.AdaptiveGroup();
+
+            adaptiveSubgroup = new notifLib.AdaptiveSubgroup();
+
+            adaptiveText = new notifLib.AdaptiveText();
+            adaptiveText.text = string_1;
+            adaptiveText.hintStyle = notifLib.AdaptiveTextStyle.subtitle;
+            adaptiveSubgroup.children.push(adaptiveText);
+
+            adaptiveText = new notifLib.AdaptiveText();
+            adaptiveText.text = string_2;
+            adaptiveText.hintStyle = notifLib.AdaptiveTextStyle.captionSubtle;
+            adaptiveSubgroup.children.push(adaptiveText);
+
+            adaptiveText = new notifLib.AdaptiveText();
+            adaptiveText.text = string_3;
+            adaptiveText.hintStyle = notifLib.AdaptiveTextStyle.captionSubtle;
+            adaptiveSubgroup.children.push(adaptiveText);
+
+            adaptiveGroup.children.push(adaptiveSubgroup);
+
+            tileBindingContentAdaptive.children.push(adaptiveGroup);
+
+            tileBinding.content = tileBindingContentAdaptive;
+
+            tileBinding.branding = notifLib.TileBranding.name;
+            tileVisual.tileWide = tileBinding;
+
+            tileVisual.lockDetailedStatus1 = tile1.string_2;
+            tileVisual.lockDetailedStatus2 = tile1.string_3;
+
+            tileContent.visual = tileVisual;
+
+
+            // Create the tile notification
+            var tileNotif = new Windows.UI.Notifications.TileNotification(tileContent.getXml());
+
+            //expiration time
+            var expiryTime = new Date(dateMark.getTime() + (applicationData.values["interval"] * 60 * 1000));
+
+            tileNotif.expirationTime = expiryTime;
+
+            applicationData.values["lastTileNotification"] = dateMark.getTime();
+
+            // And send the notification to the primary tile
+            Windows.UI.Notifications.TileUpdateManager.createTileUpdaterForApplication().enableNotificationQueueForSquare150x150(true);
+            Windows.UI.Notifications.TileUpdateManager.createTileUpdaterForApplication().enableNotificationQueueForWide310x150(true);
+            Windows.UI.Notifications.TileUpdateManager.createTileUpdaterForApplication().update(tileNotif);
+        }
+    }
 });

@@ -10,8 +10,12 @@
     var backgroundTaskInstance = Windows.UI.WebUI.WebUIBackgroundTaskInstance.current;
     var taskAction = Windows.UI.WebUI.WebUIBackgroundTaskInstance.current.triggerDetails;
     var taskActionDetail;
+    var appTriggerArgument;
     if (taskAction !== null) {
         taskActionDetail = taskAction.argument;
+        if (taskAction.arguments !== null) {
+            appTriggerArgument = taskAction.arguments["argument"];
+        }
     }
 
     // Query BackgroundWorkCost
@@ -37,15 +41,18 @@
     //
     function doWork() {
 
-        console.log("Action from toast:" + taskActionDetail);
-        
-        var key = null,
-            applicationData = Windows.Storage.ApplicationData.current.localSettings;
-        var resourceLoader = new Windows.ApplicationModel.Resources.ResourceLoader();
         //
         // TODO: Write your JavaScript code here to do work in the background.
         // If you write a loop or callback, remember  have it check for canceled==false.
         //
+        
+        var key = null,
+            applicationData = Windows.Storage.ApplicationData.current.localSettings;
+        var resourceLoader = new Windows.ApplicationModel.Resources.ResourceLoader();
+
+        if (taskActionDetail == "clear") {
+            applicationData.values.remove("virtualMarkTime");
+        }
 
         var date = new Date();
         var hours = date.getHours();
@@ -87,6 +94,7 @@
             }
             virtualPreassureMark();
             //-------------------------------------------weather values------------------------------------------------------------
+            var settingsDifference;
             var delta = barometer_value - applicationData.values["virtualMarkValue"];
             var difference = delta;
             if (delta < 0) {
@@ -100,36 +108,38 @@
             if (difference > 0) {
 
                 if (month >= 4 && month < 10) {
-                    tempForecast = applicationData.values["tempUp"];
+                    tempForecast = resourceLoader.getString("tempUp");
                 }
                 else {
-                    tempForecast = applicationData.values["tempDown"];
+                    tempForecast = resourceLoader.getString("tempDown");
                 };
 
                 if (barometer_value > 760) {
-                    downfallForecast = applicationData.values["noDownfall"];
+                    downfallForecast = resourceLoader.getString("noDownfall");
                 }
                 else {
-                    downfallForecast = applicationData.values["maybeDownfall"];
+                    downfallForecast = resourceLoader.getString("maybeDownfall");
                 };
             }
             else {
                 if (month >= 4 && month < 10) {
-                    tempForecast = applicationData.values["tempDown"];
+                    tempForecast = resourceLoader.getString("tempDown");
                 }
                 else {
-                    tempForecast = applicationData.values["tempUp"];
+                    tempForecast = resourceLoader.getString("tempUp");
                 };
 
                 if (barometer_value > 760) {
-                    downfallForecast = applicationData.values["maybeDownfall"];
+                    downfallForecast = resourceLoader.getString("maybeDownfall");
                 }
                 else {
-                    downfallForecast = applicationData.values["downfall"];
+                    downfallForecast = resourceLoader.getString("downfall");
                 };
+                applicationData.values["tempForecast"] = tempForecast;
+                applicationData.values["downfallForecast"] = downfallForecast;
             }
             //--------------------------------------------------------------------------------------------------
-
+            Windows.UI.Notifications.TileUpdateManager.createTileUpdaterForApplication().clear();
             var tile1 = {
                 string_1: resourceLoader.getString("preassure"),
                 string_2: resourceLoader.getString("current") + barometer_value + resourceLoader.getString('mmHg'),
@@ -141,15 +151,13 @@
                 string_3: downfallForecast
             };
            
-
             for (var i = 1; i <= 2; i++) {
-
-                var tile = (i < 2) ? tile1 : tile2;
-
+                var tile = (i < 2) ? tile2 : tile1;
                 showNotification(tile.string_1, tile.string_2, tile.string_3);
             };
 
             function showNotification(string_1, string_2, string_3) {
+
 
                 //medium
                 var tileContent = new notifLib.TileContent();
@@ -169,18 +177,18 @@
                 adaptiveText = new notifLib.AdaptiveText();
                 adaptiveText.text = string_2;
                 adaptiveText.hintStyle = notifLib.AdaptiveTextStyle.captionSubtle;
+                //adaptiveText.hintWrap = true;
                 adaptiveSubgroup.children.push(adaptiveText);
 
                 adaptiveText = new notifLib.AdaptiveText();
                 adaptiveText.text = string_3;
                 adaptiveText.hintStyle = notifLib.AdaptiveTextStyle.captionSubtle;
-                adaptiveText.hintWrap = true;
+                //adaptiveText.hintWrap = true;
                 adaptiveSubgroup.children.push(adaptiveText);
 
                 adaptiveGroup.children.push(adaptiveSubgroup);
 
                 tileBindingContentAdaptive.children.push(adaptiveGroup);
-
 
                 tileBinding.content = tileBindingContentAdaptive;
 
@@ -188,7 +196,6 @@
                 tileVisual.tileMedium = tileBinding;
 
                 //wide
-
                 tileBinding = new notifLib.TileBinding();
                 tileBindingContentAdaptive = new notifLib.TileBindingContentAdaptive();
 
@@ -217,7 +224,6 @@
 
                 tileBinding.content = tileBindingContentAdaptive;
 
-
                 tileBinding.branding = notifLib.TileBranding.name;
                 tileVisual.tileWide = tileBinding;
 
@@ -240,13 +246,17 @@
 
                 // And send the notification to the primary tile
                 Windows.UI.Notifications.TileUpdateManager.createTileUpdaterForApplication().enableNotificationQueueForSquare150x150(true);
+                Windows.UI.Notifications.TileUpdateManager.createTileUpdaterForApplication().enableNotificationQueueForWide310x150(true);
                 Windows.UI.Notifications.TileUpdateManager.createTileUpdaterForApplication().update(tileNotif);
             }
         }
-            //-------------------------------------------ALERT----------------------------------------------------
+        //-------------------------------------------ALERT----------------------------------------------------
         if (applicationData.values["showNotifications"]) {
 
-            if (delta >= applicationData.values["dirrerence"]) {
+            if (applicationData.values["dirrerence"] && applicationData.values["dirrerence"] != 10) {
+                settingsDifference = applicationData.values["dirrerence"];
+            }
+            if (delta >= settingsDifference) {
 
                 //-------------------------------------------BADGE----------------------------------------------------
 
@@ -269,34 +279,38 @@
                 var toastBindingGeneric = new notifLib1.ToastBindingGeneric();
 
                 var adaptiveText1 = new notifLib1.AdaptiveText();
-                adaptiveText1.text = applicationData.values["weatherChange"];
+                adaptiveText1.text = resourceLoader.getString("weatherChange");
                 toastBindingGeneric.children.push(adaptiveText1);
 
                 adaptiveText1 = new notifLib1.AdaptiveText();
-                adaptiveText1.text = applicationData.values["forecast"];
+                adaptiveText1.text = tempForecast;
+                toastBindingGeneric.children.push(adaptiveText1);
+
+                adaptiveText1 = new notifLib1.AdaptiveText();
+                //adaptiveText1.text = downfallForecast;
+                adaptiveText1.text = downfallForecast;
                 toastBindingGeneric.children.push(adaptiveText1);
 
                 toastVisual.bindingGeneric = toastBindingGeneric;
 
                 toastContent.visual = toastVisual;
 
-                var toastActionsCustom = new notifLib.ToastActionsCustom();
+                var toastActionsCustom = new notifLib1.ToastActionsCustom();
 
-                var toastButton = new notifLib.ToastButton("Clear", "action=clear&callId=1000");
-                toastButton.activationType = notifLib.ToastActivationType.background;
-                toastButton.imageUri = "Content/images/icons-png/check-white.png";
+                var toastButton = new notifLib1.ToastButton(resourceLoader.getString("clear"), "clear");
+                toastButton.activationType = notifLib1.ToastActivationType.background;
+                toastButton.imageUri = "images/cross.png";
                 toastActionsCustom.buttons.push(toastButton);
-
 
                 toastContent.actions = toastActionsCustom;
 
-
-                toastContent.launch = "action=viewDetails&callId=1000";
-
-
+                toastContent.launch = "viewDetails";
 
                 // Create the toast notification
                 var toastNotif = new Windows.UI.Notifications.ToastNotification(toastContent.getXml());
+
+                toastNotif.tag = date.getTime();
+                applicationData.values["toastTag"] = toastNotif.tag;
 
                 // And send the notification
                 Windows.UI.Notifications.ToastNotificationManager.createToastNotifier().show(toastNotif);
@@ -306,7 +320,7 @@
                 //
                 key = backgroundTaskInstance.task.taskId.toString();
                 applicationData.values[key] = "Succeeded";
-            }
+            //}
         }
         //
         // A JavaScript background task must call close when it is done.
