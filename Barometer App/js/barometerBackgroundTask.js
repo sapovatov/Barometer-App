@@ -10,12 +10,8 @@
     var backgroundTaskInstance = Windows.UI.WebUI.WebUIBackgroundTaskInstance.current;
     var taskAction = Windows.UI.WebUI.WebUIBackgroundTaskInstance.current.triggerDetails;
     var taskActionDetail;
-    var appTriggerArgument;
     if (taskAction !== null) {
         taskActionDetail = taskAction.argument;
-        if (taskAction.arguments !== null) {
-            appTriggerArgument = taskAction.arguments["argument"];
-        }
     }
 
     // Query BackgroundWorkCost
@@ -55,55 +51,60 @@
         }
 
         var date = new Date();
-        var hours = date.getHours();
-        var minutes = date.getMinutes();
+        var hours = (date.getHours() < 10) ? "0" + date.getHours() : date.getHours();
+        var minutes = (date.getMinutes() < 10) ? "0" + date.getMinutes() : date.getMinutes();
         //-----------------------------------NOTIFICATION---------------------------------------------------
         var notifLib = Microsoft.Toolkit.Uwp.Notifications;
 
-        if (applicationData.values["tileNotifications"]) {
+        //-------------------------------------barometer value---------------------------------------
+        var desiredReportIntervalMs;
+        var barometer;
+        var barometer_value; 
 
+        barometer = Windows.Devices.Sensors.Barometer.getDefault();
+        if (barometer) {
+            // Select a report interval that is both suitable for the purposes of the app and supported by the sensor.
+            // This value will be used later to activate the sensor.
+            var minReportIntervalMs = barometer.minReportIntervalMs;
+            desiredReportIntervalMs = minReportIntervalMs > 1000 ? minReportIntervalMs : 1000;
+            barometer.reportInterval = 50;
+            barometer.addEventListener("readingchanged", onBarometerDataChanged);
+        }
 
-            //-------------------------------------barometer value---------------------------------------
-            var desiredReportIntervalMs;
-            var barometer;
-            var barometer_value; 
+        function onBarometerDataChanged(e) {
+            var reading = e.reading;
+            barometer_value = Math.round(e.reading.stationPressureInHectopascals.toFixed(2) / 1.33322387415);
+        };
+        //---------------------------------------------------------------------------------------------
 
-            barometer = Windows.Devices.Sensors.Barometer.getDefault();
-            if (barometer) {
-                // Select a report interval that is both suitable for the purposes of the app and supported by the sensor.
-                // This value will be used later to activate the sensor.
-                var minReportIntervalMs = barometer.minReportIntervalMs;
-                desiredReportIntervalMs = minReportIntervalMs > 1000 ? minReportIntervalMs : 1000;
-                barometer.addEventListener("readingchanged", onBarometerDataChanged);
-            }
-
-            function onBarometerDataChanged(e) {
-                var reading = e.reading;
-                barometer_value = Math.round(e.reading.stationPressureInHectopascals.toFixed(2) / 1.33322387415);
-            };
-            //---------------------------------------------------------------------------------------------
-
-            //-----------------------------------------------virtual preassure mark---------------------------------
-            function virtualPreassureMark() {
+        //-----------------------------------------------virtual preassure mark---------------------------------
+        function virtualPreassureMark() {
+            setTimeout(function () {
                 var currentTime = date.getTime();
                 if (!(applicationData.values["virtualMarkTime"]) || currentTime - applicationData.values["virtualMarkTime"] >= 12 * 60 * 60 * 1000) {
                     applicationData.values["virtualMarkValue"] = barometer_value;
                     applicationData.values["virtualMarkTime"] = currentTime;
                     applicationData.values["virtualMarkHoursMinutes"] = hours + ":" + minutes;
                 }
-            }
-            virtualPreassureMark();
-            //-------------------------------------------weather values------------------------------------------------------------
-            var settingsDifference;
+            }, 50)
+        }
+        virtualPreassureMark();
+        //-------------------------------------------weather values------------------------------------------------------------
+
+        var tempForecast;
+        var downfallForecast;
+        var month = date.getMonth() + 1;
+        var tile1;
+        var tile2;
+
+        var initValues = setTimeout(function () {
+
+            var settingsDifference = 10;
             var delta = barometer_value - applicationData.values["virtualMarkValue"];
             var difference = delta;
             if (delta < 0) {
                 delta += delta * 2;
             }
-
-            var month = date.getMonth() + 1;
-            var tempForecast;
-            var downfallForecast;
 
             if (difference > 0) {
 
@@ -138,117 +139,118 @@
                 applicationData.values["tempForecast"] = tempForecast;
                 applicationData.values["downfallForecast"] = downfallForecast;
             }
-            //--------------------------------------------------------------------------------------------------
-            Windows.UI.Notifications.TileUpdateManager.createTileUpdaterForApplication().clear();
-            var tile1 = {
-                string_1: resourceLoader.getString("preassure"),
-                string_2: resourceLoader.getString("current") + barometer_value + resourceLoader.getString('mmHg'),
-                string_3: resourceLoader.getString("was") + applicationData.values["virtualMarkValue"] + resourceLoader.getString('mmHg') + "(" + applicationData.values["virtualMarkHoursMinutes"] + ")"
-            };
-            var tile2 = {
-                string_1: resourceLoader.getString('weatherForecast'), 
-                string_2: tempForecast,
-                string_3: downfallForecast
-            };
+            //------------------------------------------TILE UPDATE-------------------------------------------------
            
-            for (var i = 1; i <= 2; i++) {
-                var tile = (i < 2) ? tile2 : tile1;
-                showNotification(tile.string_1, tile.string_2, tile.string_3);
+            if (applicationData.values["tileNotifications"]) {
+                Windows.UI.Notifications.TileUpdateManager.createTileUpdaterForApplication().clear();
+                tile1 = {
+                    string_1: resourceLoader.getString("current") + barometer_value + resourceLoader.getString('mmHg'),
+                    string_2: resourceLoader.getString("was") + applicationData.values["virtualMarkValue"] + resourceLoader.getString('mmHg'),
+                    string_3: "(" + applicationData.values["virtualMarkHoursMinutes"] + ")"
+                };
+                tile2 = {
+                    string_1: resourceLoader.getString('weatherForecast'),
+                    string_2: tempForecast,
+                    string_3: downfallForecast
+                };
+
+                for (var i = 1; i <= 2; i++) {
+                    var tile = (i < 2) ? tile2 : tile1;
+                    showNotification(tile.string_1, tile.string_2, tile.string_3);
+                };
             };
+        }, 100);
 
-            function showNotification(string_1, string_2, string_3) {
+        function showNotification(string_1, string_2, string_3) {
+
+            //medium
+            var tileContent = new notifLib.TileContent();
+            var tileVisual = new notifLib.TileVisual();
+            var tileBinding = new notifLib.TileBinding();
+            var tileBindingContentAdaptive = new notifLib.TileBindingContentAdaptive();
+
+            var adaptiveGroup = new notifLib.AdaptiveGroup();
+
+            var adaptiveSubgroup = new notifLib.AdaptiveSubgroup();
+
+            var adaptiveText = new notifLib.AdaptiveText();
+            adaptiveText.text = string_1;
+            adaptiveText.hintStyle = notifLib.AdaptiveTextStyle.caption;
+            adaptiveSubgroup.children.push(adaptiveText);
+
+            adaptiveText = new notifLib.AdaptiveText();
+            adaptiveText.text = string_2;
+            adaptiveText.hintStyle = notifLib.AdaptiveTextStyle.captionSubtle;
+            //adaptiveText.hintWrap = true;
+            adaptiveSubgroup.children.push(adaptiveText);
+
+            adaptiveText = new notifLib.AdaptiveText();
+            adaptiveText.text = string_3;
+            adaptiveText.hintStyle = notifLib.AdaptiveTextStyle.captionSubtle;
+            //adaptiveText.hintWrap = true;
+            adaptiveSubgroup.children.push(adaptiveText);
+
+            adaptiveGroup.children.push(adaptiveSubgroup);
+
+            tileBindingContentAdaptive.children.push(adaptiveGroup);
+
+            tileBinding.content = tileBindingContentAdaptive;
+
+            tileBinding.branding = notifLib.TileBranding.name;
+            tileVisual.tileMedium = tileBinding;
+
+            //wide
+            tileBinding = new notifLib.TileBinding();
+            tileBindingContentAdaptive = new notifLib.TileBindingContentAdaptive();
+
+            adaptiveGroup = new notifLib.AdaptiveGroup();
+
+            adaptiveSubgroup = new notifLib.AdaptiveSubgroup();
+
+            adaptiveText = new notifLib.AdaptiveText();
+            adaptiveText.text = string_1;
+            adaptiveText.hintStyle = notifLib.AdaptiveTextStyle.caption;
+            adaptiveSubgroup.children.push(adaptiveText);
+
+            adaptiveText = new notifLib.AdaptiveText();
+            adaptiveText.text = string_2;
+            adaptiveText.hintStyle = notifLib.AdaptiveTextStyle.captionSubtle;
+            adaptiveSubgroup.children.push(adaptiveText);
+
+            adaptiveText = new notifLib.AdaptiveText();
+            adaptiveText.text = string_3;
+            adaptiveText.hintStyle = notifLib.AdaptiveTextStyle.captionSubtle;
+            adaptiveSubgroup.children.push(adaptiveText);
+
+            adaptiveGroup.children.push(adaptiveSubgroup);
+
+            tileBindingContentAdaptive.children.push(adaptiveGroup);
+
+            tileBinding.content = tileBindingContentAdaptive;
+
+            tileBinding.branding = notifLib.TileBranding.name;
+            tileVisual.tileWide = tileBinding;
+
+            tileVisual.lockDetailedStatus1 = tile1.string_1 + " " + tile1.string_2 + " " + tile1.string_3;
+            tileVisual.lockDetailedStatus2 = tile2.string_2;
+            tileVisual.lockDetailedStatus3 = tile2.string_3;
+
+            tileContent.visual = tileVisual;
 
 
-                //medium
-                var tileContent = new notifLib.TileContent();
-                var tileVisual = new notifLib.TileVisual();
-                var tileBinding = new notifLib.TileBinding();
-                var tileBindingContentAdaptive = new notifLib.TileBindingContentAdaptive();
+            // Create the tile notification
+            var tileNotif = new Windows.UI.Notifications.TileNotification(tileContent.getXml());
 
-                var adaptiveGroup = new notifLib.AdaptiveGroup();
+            //expiration time
+            var checkInterval = (applicationData.values["interval"]) ? applicationData.values["interval"] : 15;
+            var expiryTime = new Date(date.getTime() + (checkInterval * 60 * 1000));
 
-                var adaptiveSubgroup = new notifLib.AdaptiveSubgroup();
+            tileNotif.expirationTime = expiryTime;
 
-                var adaptiveText = new notifLib.AdaptiveText();
-                adaptiveText.text = string_1;
-                adaptiveText.hintStyle = notifLib.AdaptiveTextStyle.caption;
-                adaptiveSubgroup.children.push(adaptiveText);
-
-                adaptiveText = new notifLib.AdaptiveText();
-                adaptiveText.text = string_2;
-                adaptiveText.hintStyle = notifLib.AdaptiveTextStyle.captionSubtle;
-                //adaptiveText.hintWrap = true;
-                adaptiveSubgroup.children.push(adaptiveText);
-
-                adaptiveText = new notifLib.AdaptiveText();
-                adaptiveText.text = string_3;
-                adaptiveText.hintStyle = notifLib.AdaptiveTextStyle.captionSubtle;
-                //adaptiveText.hintWrap = true;
-                adaptiveSubgroup.children.push(adaptiveText);
-
-                adaptiveGroup.children.push(adaptiveSubgroup);
-
-                tileBindingContentAdaptive.children.push(adaptiveGroup);
-
-                tileBinding.content = tileBindingContentAdaptive;
-
-                tileBinding.branding = notifLib.TileBranding.name;
-                tileVisual.tileMedium = tileBinding;
-
-                //wide
-                tileBinding = new notifLib.TileBinding();
-                tileBindingContentAdaptive = new notifLib.TileBindingContentAdaptive();
-
-                adaptiveGroup = new notifLib.AdaptiveGroup();
-
-                adaptiveSubgroup = new notifLib.AdaptiveSubgroup();
-
-                adaptiveText = new notifLib.AdaptiveText();
-                adaptiveText.text = string_1;
-                adaptiveText.hintStyle = notifLib.AdaptiveTextStyle.subtitle;
-                adaptiveSubgroup.children.push(adaptiveText);
-
-                adaptiveText = new notifLib.AdaptiveText();
-                adaptiveText.text = string_2;
-                adaptiveText.hintStyle = notifLib.AdaptiveTextStyle.captionSubtle;
-                adaptiveSubgroup.children.push(adaptiveText);
-
-                adaptiveText = new notifLib.AdaptiveText();
-                adaptiveText.text = string_3;
-                adaptiveText.hintStyle = notifLib.AdaptiveTextStyle.captionSubtle;
-                adaptiveSubgroup.children.push(adaptiveText);
-
-                adaptiveGroup.children.push(adaptiveSubgroup);
-
-                tileBindingContentAdaptive.children.push(adaptiveGroup);
-
-                tileBinding.content = tileBindingContentAdaptive;
-
-                tileBinding.branding = notifLib.TileBranding.name;
-                tileVisual.tileWide = tileBinding;
-
-                tileVisual.lockDetailedStatus1 = tile1.string_2 + " " + tile1.string_3;
-                tileVisual.lockDetailedStatus2 = tile2.string_2;
-                tileVisual.lockDetailedStatus3 = tile2.string_3;
-
-                tileContent.visual = tileVisual;
-
-
-                // Create the tile notification
-                var tileNotif = new Windows.UI.Notifications.TileNotification(tileContent.getXml());
-
-                //expiration time
-                var expiryTime = new Date(date.getTime() + (applicationData.values["interval"] * 60 * 1000));
-
-                tileNotif.expirationTime = expiryTime;
-
-                applicationData.values["lastTileNotification"] = date.getTime();
-
-                // And send the notification to the primary tile
-                Windows.UI.Notifications.TileUpdateManager.createTileUpdaterForApplication().enableNotificationQueueForSquare150x150(true);
-                Windows.UI.Notifications.TileUpdateManager.createTileUpdaterForApplication().enableNotificationQueueForWide310x150(true);
-                Windows.UI.Notifications.TileUpdateManager.createTileUpdaterForApplication().update(tileNotif);
-            }
+            // And send the notification to the primary tile
+            Windows.UI.Notifications.TileUpdateManager.createTileUpdaterForApplication().enableNotificationQueueForSquare150x150(true);
+            Windows.UI.Notifications.TileUpdateManager.createTileUpdaterForApplication().enableNotificationQueueForWide310x150(true);
+            Windows.UI.Notifications.TileUpdateManager.createTileUpdaterForApplication().update(tileNotif);
         }
         //-------------------------------------------ALERT----------------------------------------------------
         if (applicationData.values["showNotifications"]) {
@@ -257,75 +259,78 @@
                 settingsDifference = applicationData.values["dirrerence"];
             }
             if (delta >= settingsDifference) {
+                setTimeout(function () {
+                    //-------------------------------------------BADGE----------------------------------------------------
 
-                //-------------------------------------------BADGE----------------------------------------------------
+                    var badgeContent = new notifLib.BadgeNumericContent();
+                    var num = 1;
+                    badgeContent.number = num;
+                    var badgeXml = badgeContent.getXml();
 
-                var badgeContent = new notifLib.BadgeNumericContent();
-                var num = 1;
-                badgeContent.number = num;
-                var badgeXml = badgeContent.getXml();
+                    // Create the badge notification
+                    var badge = new Windows.UI.Notifications.BadgeNotification(badgeXml);
+                    // Create the badge updater for the application.
+                    var badgeUpdater = Windows.UI.Notifications.BadgeUpdateManager.createBadgeUpdaterForApplication();
+                    // And update the badge
+                    badgeUpdater.update(badge);
 
-                // Create the badge notification
-                var badge = new Windows.UI.Notifications.BadgeNotification(badgeXml);
-                // Create the badge updater for the application.
-                var badgeUpdater = Windows.UI.Notifications.BadgeUpdateManager.createBadgeUpdaterForApplication();
-                // And update the badge
-                badgeUpdater.update(badge);
+                    //-------------------------------------------TOAST---------------------------------------------------------
+                    var notifLib1 = Microsoft.Toolkit.Uwp.Notifications;
+                    var toastContent = new notifLib1.ToastContent();
+                    var toastVisual = new notifLib1.ToastVisual();
+                    var toastBindingGeneric = new notifLib1.ToastBindingGeneric();
 
-                //-------------------------------------------TOAST---------------------------------------------------------
-                var notifLib1 = Microsoft.Toolkit.Uwp.Notifications;
-                var toastContent = new notifLib1.ToastContent();
-                var toastVisual = new notifLib1.ToastVisual();
-                var toastBindingGeneric = new notifLib1.ToastBindingGeneric();
+                    var adaptiveText1 = new notifLib1.AdaptiveText();
+                    adaptiveText1.text = resourceLoader.getString("weatherChange");
+                    toastBindingGeneric.children.push(adaptiveText1);
 
-                var adaptiveText1 = new notifLib1.AdaptiveText();
-                adaptiveText1.text = resourceLoader.getString("weatherChange");
-                toastBindingGeneric.children.push(adaptiveText1);
+                    adaptiveText1 = new notifLib1.AdaptiveText();
+                    adaptiveText1.text = tempForecast;
+                    toastBindingGeneric.children.push(adaptiveText1);
 
-                adaptiveText1 = new notifLib1.AdaptiveText();
-                adaptiveText1.text = tempForecast;
-                toastBindingGeneric.children.push(adaptiveText1);
+                    adaptiveText1 = new notifLib1.AdaptiveText();
+                    adaptiveText1.text = downfallForecast;
+                    toastBindingGeneric.children.push(adaptiveText1);
 
-                adaptiveText1 = new notifLib1.AdaptiveText();
-                //adaptiveText1.text = downfallForecast;
-                adaptiveText1.text = downfallForecast;
-                toastBindingGeneric.children.push(adaptiveText1);
+                    toastVisual.bindingGeneric = toastBindingGeneric;
 
-                toastVisual.bindingGeneric = toastBindingGeneric;
+                    toastContent.visual = toastVisual;
 
-                toastContent.visual = toastVisual;
+                    var toastActionsCustom = new notifLib1.ToastActionsCustom();
 
-                var toastActionsCustom = new notifLib1.ToastActionsCustom();
+                    var toastButton = new notifLib1.ToastButton(resourceLoader.getString("clear"), "clear");
+                    toastButton.activationType = notifLib1.ToastActivationType.background;
+                    toastButton.imageUri = "images/cancel.png";
+                    toastActionsCustom.buttons.push(toastButton);
 
-                var toastButton = new notifLib1.ToastButton(resourceLoader.getString("clear"), "clear");
-                toastButton.activationType = notifLib1.ToastActivationType.background;
-                toastButton.imageUri = "images/cross.png";
-                toastActionsCustom.buttons.push(toastButton);
+                    toastContent.actions = toastActionsCustom;
 
-                toastContent.actions = toastActionsCustom;
+                    toastContent.launch = "viewDetails";
 
-                toastContent.launch = "viewDetails";
+                    // Create the toast notification
+                    var toastNotif = new Windows.UI.Notifications.ToastNotification(toastContent.getXml());
 
-                // Create the toast notification
-                var toastNotif = new Windows.UI.Notifications.ToastNotification(toastContent.getXml());
+                    toastNotif.tag = date.getTime();
+                    applicationData.values["toastTag"] = toastNotif.tag;
 
-                toastNotif.tag = date.getTime();
-                applicationData.values["toastTag"] = toastNotif.tag;
+                    // And send the notification
+                    Windows.UI.Notifications.ToastNotificationManager.createToastNotifier().show(toastNotif);
+                    //-------------------------------------------------------------------------------------------------
 
-                // And send the notification
-                Windows.UI.Notifications.ToastNotificationManager.createToastNotifier().show(toastNotif);
-                //-------------------------------------------------------------------------------------------------
-
-                // Record information in LocalSettings to communicate with the app.
-                //
-                key = backgroundTaskInstance.task.taskId.toString();
-                applicationData.values[key] = "Succeeded";
-            //}
+                    // Record information in LocalSettings to communicate with the app.
+                    //
+                    key = backgroundTaskInstance.task.taskId.toString();
+                    applicationData.values[key] = "Succeeded";
+                },150)
+            }
         }
         //
         // A JavaScript background task must call close when it is done.
         //
-        close();
+        setTimeout(function () {
+            close();
+        },200);
+        
     }
 
     doWork();

@@ -71,7 +71,7 @@
     <Content Include="images\Barometer_minutes.png" />
     <Content Include="images\Barometer_months.png" />
     <Content Include="images\Barometer_months_ru.png" />
-    <Content Include="images\cross.png" />
+    <Content Include="images\cancel.png" />
     <Content Include="images\LargeTile.scale-100.png" />
     <Content Include="images\LargeTile.scale-125.png" />
     <Content Include="images\LargeTile.scale-150.png" />

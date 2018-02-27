@@ -182,6 +182,7 @@ jQuery(document).ready(function () {
     jQuery("#tileNotifications").on("click", function () {
         if (jQuery(this).is(":checked")) {
             applicationData.values["tileNotifications"] = true;
+            showNotification();
         }
         else {
             applicationData.values.remove("tileNotifications");
@@ -211,8 +212,9 @@ jQuery(document).ready(function () {
     if (barometer) {
         // Select a report interval that is both suitable for the purposes of the app and supported by the sensor.
         // This value will be used later to activate the sensor.
-        var minReportIntervalMs = barometer.minReportIntervalMs;
+        var minReportIntervalMs = barometer.minimumReportInterval;
         desiredReportIntervalMs = minReportIntervalMs > 1000 ? minReportIntervalMs : 1000;
+        barometer.reportInterval = desiredReportIntervalMs;
 
         function barometer_refresh() {
             if (jQuery(".middleTab").hasClass("activeTab")) {
@@ -230,7 +232,7 @@ jQuery(document).ready(function () {
         barometer_value = e.reading.stationPressureInHectopascals.toFixed(2);
 
         rotation(jQuery("#main_arrow"), ((barometer_value - 1010) * 2.43), 1, 1);
-        details_page();        
+        details_page();      
     };
     //-------------------------------------------------------------------------------------------------------
     function rotation(element, r_value, speed, type) {
@@ -449,7 +451,7 @@ jQuery(document).ready(function () {
 
     var startRegistration = setTimeout(function () {
         mainTaskRegistration(); 
-    }, 3000);
+    }, 2000);
 
     function settingsChanged() {
         mainTaskUnregister();
@@ -556,116 +558,120 @@ jQuery(document).ready(function () {
         
     };
     //-----------------------------------------------virtual preassure mark---------------------------------
-    if (applicationData.values["tileNotifications"]) {
-        var dateMark = new Date();
-        var notifLib = Microsoft.Toolkit.Uwp.Notifications;
-        function virtualPreassureMark() {
+    var dateMark = new Date();
+    var hours = (dateMark.getHours() < 10) ? "0" + dateMark.getHours() : dateMark.getHours();
+    var minutes = (dateMark.getMinutes() < 10) ? "0" + dateMark.getMinutes() : dateMark.getMinutes();
+    var notifLib = Microsoft.Toolkit.Uwp.Notifications;
+    function virtualPreassureMark() {
+        setTimeout(function () {
             var currentTime = dateMark.getTime();
             if (!(applicationData.values["virtualMarkTime"]) || currentTime - applicationData.values["virtualMarkTime"] >= 12 * 60 * 60 * 1000) {
-                applicationData.values["virtualMarkValue"] = barometer_value;
+                applicationData.values["virtualMarkValue"] = Math.round(barometer_value / 1.33322387415);
                 applicationData.values["virtualMarkTime"] = currentTime;
-                applicationData.values["virtualMarkHoursMinutes"] = hours + ":" + minutes;
+                applicationData.values["virtualMarkHoursMinutes"] = "" + hours + ":" + minutes + "";
             }
-        }
-        virtualPreassureMark();
-        //------------------------------------------------------tile update--------------------------------------
-        Windows.UI.Notifications.TileUpdateManager.createTileUpdaterForApplication().clear();
-        var tile1 = {
-            string_1: resourceLoader.getString("preassure"),
-            string_2: resourceLoader.getString("current") + barometer_value + resourceLoader.getString('mmHg'),
-            string_3: resourceLoader.getString("was") + applicationData.values["virtualMarkValue"] + resourceLoader.getString('mmHg') + "(" + applicationData.values["virtualMarkHoursMinutes"] + ")"
-        };
-        showNotification(tile1.string_1, tile1.string_2, tile1.string_3);
-        function showNotification(string_1, string_2, string_3) {
+        }, 3000)
+    }
+    virtualPreassureMark();
+    //------------------------------------------------------tile update--------------------------------------
+    Windows.UI.Notifications.TileUpdateManager.createTileUpdaterForApplication().clear();
+    if (applicationData.values["tileNotifications"]) {
+        setTimeout(function () {
+            showNotification();
+        },3000)
+    }
+    function showNotification() {
 
-            //medium
-            var tileContent = new notifLib.TileContent();
-            var tileVisual = new notifLib.TileVisual();
-            var tileBinding = new notifLib.TileBinding();
-            var tileBindingContentAdaptive = new notifLib.TileBindingContentAdaptive();
+        var string_1 = resourceLoader.getString("current") + Math.round(barometer_value / 1.33322387415) + resourceLoader.getString('mmHg');
+        var string_2 = resourceLoader.getString("was") + applicationData.values["virtualMarkValue"] + resourceLoader.getString('mmHg');
+        var string_3 = "(" + applicationData.values["virtualMarkHoursMinutes"] + ")";
 
-            var adaptiveGroup = new notifLib.AdaptiveGroup();
+        //medium
+        var tileContent = new notifLib.TileContent();
+        var tileVisual = new notifLib.TileVisual();
+        var tileBinding = new notifLib.TileBinding();
+        var tileBindingContentAdaptive = new notifLib.TileBindingContentAdaptive();
 
-            var adaptiveSubgroup = new notifLib.AdaptiveSubgroup();
+        var adaptiveGroup = new notifLib.AdaptiveGroup();
 
-            var adaptiveText = new notifLib.AdaptiveText();
-            adaptiveText.text = string_1;
-            adaptiveText.hintStyle = notifLib.AdaptiveTextStyle.caption;
-            adaptiveSubgroup.children.push(adaptiveText);
+        var adaptiveSubgroup = new notifLib.AdaptiveSubgroup();
 
-            adaptiveText = new notifLib.AdaptiveText();
-            adaptiveText.text = string_2;
-            adaptiveText.hintStyle = notifLib.AdaptiveTextStyle.captionSubtle;
-            //adaptiveText.hintWrap = true;
-            adaptiveSubgroup.children.push(adaptiveText);
+        var adaptiveText = new notifLib.AdaptiveText();
+        adaptiveText.text = string_1;
+        adaptiveText.hintStyle = notifLib.AdaptiveTextStyle.caption;
+        adaptiveSubgroup.children.push(adaptiveText);
 
-            adaptiveText = new notifLib.AdaptiveText();
-            adaptiveText.text = string_3;
-            adaptiveText.hintStyle = notifLib.AdaptiveTextStyle.captionSubtle;
-            //adaptiveText.hintWrap = true;
-            adaptiveSubgroup.children.push(adaptiveText);
+        adaptiveText = new notifLib.AdaptiveText();
+        adaptiveText.text = string_2;
+        adaptiveText.hintStyle = notifLib.AdaptiveTextStyle.captionSubtle;
+        //adaptiveText.hintWrap = true;
+        adaptiveSubgroup.children.push(adaptiveText);
 
-            adaptiveGroup.children.push(adaptiveSubgroup);
+        adaptiveText = new notifLib.AdaptiveText();
+        adaptiveText.text = string_3;
+        adaptiveText.hintStyle = notifLib.AdaptiveTextStyle.captionSubtle;
+        //adaptiveText.hintWrap = true;
+        adaptiveSubgroup.children.push(adaptiveText);
 
-            tileBindingContentAdaptive.children.push(adaptiveGroup);
+        adaptiveGroup.children.push(adaptiveSubgroup);
 
-            tileBinding.content = tileBindingContentAdaptive;
+        tileBindingContentAdaptive.children.push(adaptiveGroup);
 
-            tileBinding.branding = notifLib.TileBranding.name;
-            tileVisual.tileMedium = tileBinding;
+        tileBinding.content = tileBindingContentAdaptive;
 
-            //wide
-            tileBinding = new notifLib.TileBinding();
-            tileBindingContentAdaptive = new notifLib.TileBindingContentAdaptive();
+        tileBinding.branding = notifLib.TileBranding.name;
+        tileVisual.tileMedium = tileBinding;
 
-            adaptiveGroup = new notifLib.AdaptiveGroup();
+        //wide
+        tileBinding = new notifLib.TileBinding();
+        tileBindingContentAdaptive = new notifLib.TileBindingContentAdaptive();
 
-            adaptiveSubgroup = new notifLib.AdaptiveSubgroup();
+        adaptiveGroup = new notifLib.AdaptiveGroup();
 
-            adaptiveText = new notifLib.AdaptiveText();
-            adaptiveText.text = string_1;
-            adaptiveText.hintStyle = notifLib.AdaptiveTextStyle.subtitle;
-            adaptiveSubgroup.children.push(adaptiveText);
+        adaptiveSubgroup = new notifLib.AdaptiveSubgroup();
 
-            adaptiveText = new notifLib.AdaptiveText();
-            adaptiveText.text = string_2;
-            adaptiveText.hintStyle = notifLib.AdaptiveTextStyle.captionSubtle;
-            adaptiveSubgroup.children.push(adaptiveText);
+        adaptiveText = new notifLib.AdaptiveText();
+        adaptiveText.text = string_1;
+        adaptiveText.hintStyle = notifLib.AdaptiveTextStyle.caption;
+        adaptiveSubgroup.children.push(adaptiveText);
 
-            adaptiveText = new notifLib.AdaptiveText();
-            adaptiveText.text = string_3;
-            adaptiveText.hintStyle = notifLib.AdaptiveTextStyle.captionSubtle;
-            adaptiveSubgroup.children.push(adaptiveText);
+        adaptiveText = new notifLib.AdaptiveText();
+        adaptiveText.text = string_2;
+        adaptiveText.hintStyle = notifLib.AdaptiveTextStyle.captionSubtle;
+        adaptiveSubgroup.children.push(adaptiveText);
 
-            adaptiveGroup.children.push(adaptiveSubgroup);
+        adaptiveText = new notifLib.AdaptiveText();
+        adaptiveText.text = string_3;
+        adaptiveText.hintStyle = notifLib.AdaptiveTextStyle.captionSubtle;
+        adaptiveSubgroup.children.push(adaptiveText);
 
-            tileBindingContentAdaptive.children.push(adaptiveGroup);
+        adaptiveGroup.children.push(adaptiveSubgroup);
 
-            tileBinding.content = tileBindingContentAdaptive;
+        tileBindingContentAdaptive.children.push(adaptiveGroup);
 
-            tileBinding.branding = notifLib.TileBranding.name;
-            tileVisual.tileWide = tileBinding;
+        tileBinding.content = tileBindingContentAdaptive;
 
-            tileVisual.lockDetailedStatus1 = tile1.string_2;
-            tileVisual.lockDetailedStatus2 = tile1.string_3;
+        tileBinding.branding = notifLib.TileBranding.name;
+        tileVisual.tileWide = tileBinding;
 
-            tileContent.visual = tileVisual;
+        tileVisual.lockDetailedStatus1 = string_1;
+        tileVisual.lockDetailedStatus2 = string_2 + " " + string_3;
+
+        tileContent.visual = tileVisual;
 
 
-            // Create the tile notification
-            var tileNotif = new Windows.UI.Notifications.TileNotification(tileContent.getXml());
+        // Create the tile notification
+        var tileNotif = new Windows.UI.Notifications.TileNotification(tileContent.getXml());
 
-            //expiration time
-            var expiryTime = new Date(dateMark.getTime() + (applicationData.values["interval"] * 60 * 1000));
+        //expiration time
+        var checkInterval = (applicationData.values["interval"]) ? applicationData.values["interval"] : 15;
+        var expiryTime = new Date(dateMark.getTime() + (checkInterval * 60 * 1000));
 
-            tileNotif.expirationTime = expiryTime;
+        tileNotif.expirationTime = expiryTime;
 
-            applicationData.values["lastTileNotification"] = dateMark.getTime();
-
-            // And send the notification to the primary tile
-            Windows.UI.Notifications.TileUpdateManager.createTileUpdaterForApplication().enableNotificationQueueForSquare150x150(true);
-            Windows.UI.Notifications.TileUpdateManager.createTileUpdaterForApplication().enableNotificationQueueForWide310x150(true);
-            Windows.UI.Notifications.TileUpdateManager.createTileUpdaterForApplication().update(tileNotif);
-        }
+        // And send the notification to the primary tile
+        Windows.UI.Notifications.TileUpdateManager.createTileUpdaterForApplication().enableNotificationQueueForSquare150x150(true);
+        Windows.UI.Notifications.TileUpdateManager.createTileUpdaterForApplication().enableNotificationQueueForWide310x150(true);
+        Windows.UI.Notifications.TileUpdateManager.createTileUpdaterForApplication().update(tileNotif);
     }
 });
