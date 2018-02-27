@@ -96,10 +96,10 @@
         var month = date.getMonth() + 1;
         var tile1;
         var tile2;
+        var settingsDifference = 10;
 
         var initValues = setTimeout(function () {
 
-            var settingsDifference = 10;
             var delta = barometer_value - applicationData.values["virtualMarkValue"];
             var difference = delta;
             if (delta < 0) {

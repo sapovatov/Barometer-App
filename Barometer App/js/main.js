@@ -663,12 +663,6 @@ jQuery(document).ready(function () {
         // Create the tile notification
         var tileNotif = new Windows.UI.Notifications.TileNotification(tileContent.getXml());
 
-        //expiration time
-        var checkInterval = (applicationData.values["interval"]) ? applicationData.values["interval"] : 15;
-        var expiryTime = new Date(dateMark.getTime() + (checkInterval * 60 * 1000));
-
-        tileNotif.expirationTime = expiryTime;
-
         // And send the notification to the primary tile
         Windows.UI.Notifications.TileUpdateManager.createTileUpdaterForApplication().enableNotificationQueueForSquare150x150(true);
         Windows.UI.Notifications.TileUpdateManager.createTileUpdaterForApplication().enableNotificationQueueForWide310x150(true);
