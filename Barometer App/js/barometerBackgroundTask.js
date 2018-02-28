@@ -181,7 +181,7 @@
             adaptiveText = new notifLib.AdaptiveText();
             adaptiveText.text = string_2;
             adaptiveText.hintStyle = notifLib.AdaptiveTextStyle.captionSubtle;
-            //adaptiveText.hintWrap = true;
+            adaptiveText.hintWrap = true;
             adaptiveSubgroup.children.push(adaptiveText);
 
             adaptiveText = new notifLib.AdaptiveText();
@@ -309,9 +309,6 @@
 
                     // Create the toast notification
                     var toastNotif = new Windows.UI.Notifications.ToastNotification(toastContent.getXml());
-
-                    toastNotif.tag = date.getTime();
-                    applicationData.values["toastTag"] = toastNotif.tag;
 
                     // And send the notification
                     Windows.UI.Notifications.ToastNotificationManager.createToastNotifier().show(toastNotif);

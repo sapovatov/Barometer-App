@@ -87,10 +87,10 @@ jQuery(document).ready(function () {
             }
         }
         else if (((e.center.x - e.deltaX) < 75) && (e.deltaX <= (jQuery("#settings_front").width()))) {
-            jQuery("#settings_front").css({ "left": -(jQuery("#settings_front").width() - e.deltaX) + "px", "transition": "left linear 0ms" });
-            jQuery("#settings").css({ "visibility": "visible" });
-            if (e.type == "panend") {
-                if (e.distance >= (jQuery("#settings_front").width() * 0.3)) {
+                jQuery("#settings_front").css({ "left": -(jQuery("#settings_front").width() - e.deltaX) + "px", "transition": "left linear 0ms" });
+                jQuery("#settings").css({ "visibility": "visible" });
+                if (e.type == "panend") {
+                    if (e.deltaX >= (jQuery("#settings_front").width() * 0.3)) {
                     show_settings();
                 }
                 else {
@@ -286,6 +286,7 @@ jQuery(document).ready(function () {
 
                 jQuery("#lighting").css({ "boxShadow": "inset 0px 0px 5px 1px" + light_color, "transition": "all linear 1.5s" });
                 jQuery(".page_2_mark span:last-of-type").css({ "color": light_color });
+                applicationData.values["lighting_color"] = jQuery("#lighting_color").val();
                 rotation(jQuery("#days"), -(mark_day * 11.25), 3, 3);
                 rotation(jQuery("#months"), -27.6923 - (mark_month * 27.6923), 3, 3);
                 rotation(jQuery("#hours"), -14.4 - (mark_hours * 14.4), 3, 3);
@@ -323,6 +324,7 @@ jQuery(document).ready(function () {
             if (applicationData.values["lighting_color"]) {
                 jQuery("#statistic_arrow").css({ "borderBottomColor": applicationData.values["lighting_color"] });
                 jQuery(".page_2_mark span:last-of-type").attr("style", "color: " + applicationData.values["lighting_color"] + " !important");
+                jQuery(".page_2_forecast span").attr("style", "color: " + applicationData.values["lighting_color"] + " !important");
                 jQuery("#lighting_color").val(applicationData.values["lighting_color"]);
                 light_color = applicationData.values["lighting_color"];
             }
@@ -472,6 +474,7 @@ jQuery(document).ready(function () {
             var task1 = iter1.current.value;
             if (task1.name === exampleTaskName) {
                 taskRegistered = true;
+                jQuery(".page_2_forecast span:last-of-type").html("was registered interval=" + triggerInterval);
                 break;
             }
             iter1.moveNext();
@@ -484,6 +487,7 @@ jQuery(document).ready(function () {
                 builder.setTrigger(trigger);
                 var task = builder.register();
                 taskRegistered = true;
+                jQuery(".page_2_forecast span:last-of-type").html("now registered interval=" + triggerInterval);
             });
         }
     };
@@ -604,7 +608,7 @@ jQuery(document).ready(function () {
         adaptiveText = new notifLib.AdaptiveText();
         adaptiveText.text = string_2;
         adaptiveText.hintStyle = notifLib.AdaptiveTextStyle.captionSubtle;
-        //adaptiveText.hintWrap = true;
+        adaptiveText.hintWrap = true;
         adaptiveSubgroup.children.push(adaptiveText);
 
         adaptiveText = new notifLib.AdaptiveText();
