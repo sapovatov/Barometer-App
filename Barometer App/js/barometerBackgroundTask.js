@@ -86,7 +86,7 @@
                     applicationData.values["virtualMarkTime"] = currentTime;
                     applicationData.values["virtualMarkHoursMinutes"] = hours + ":" + minutes;
                 }
-            }, 50)
+            }, 200)
         }
         virtualPreassureMark();
         //-------------------------------------------weather values------------------------------------------------------------
@@ -160,7 +160,7 @@
                     showNotification(tile.string_1, tile.string_2, tile.string_3);
                 };
             };
-        }, 100);
+        }, 250);
 
         function showNotification(string_1, string_2, string_3) {
 
@@ -182,7 +182,7 @@
             adaptiveText = new notifLib.AdaptiveText();
             adaptiveText.text = string_2;
             adaptiveText.hintStyle = notifLib.AdaptiveTextStyle.captionSubtle;
-            adaptiveText.hintWrap = true;
+            //adaptiveText.hintWrap = true;
             adaptiveSubgroup.children.push(adaptiveText);
 
             adaptiveText = new notifLib.AdaptiveText();
@@ -319,7 +319,7 @@
                     //
                     key = backgroundTaskInstance.task.taskId.toString();
                     applicationData.values[key] = "Succeeded";
-                },150)
+                },300)
             }
         }
         //
@@ -327,7 +327,7 @@
         //
         setTimeout(function () {
             close();
-        },200);
+        },350);
         
     }
 

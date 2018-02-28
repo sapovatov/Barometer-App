@@ -326,7 +326,6 @@ jQuery(document).ready(function () {
             else {
                 jQuery("#statistic_arrow").css({ "borderBottomColor": applicationData.values["lighting_color"] });
                 jQuery(".page_2_mark span:last-of-type").attr("style", "color: " + applicationData.values["lighting_color"] + " !important");
-                jQuery(".page_2_forecast span").attr("style", "color: " + applicationData.values["lighting_color"] + " !important");
                 jQuery("#lighting_color").val(applicationData.values["lighting_color"]);
                 light_color = applicationData.values["lighting_color"];
             };
@@ -608,7 +607,7 @@ jQuery(document).ready(function () {
         adaptiveText = new notifLib.AdaptiveText();
         adaptiveText.text = string_2;
         adaptiveText.hintStyle = notifLib.AdaptiveTextStyle.captionSubtle;
-        adaptiveText.hintWrap = true;
+        //adaptiveText.hintWrap = true;
         adaptiveSubgroup.children.push(adaptiveText);
 
         adaptiveText = new notifLib.AdaptiveText();
