@@ -91,6 +91,7 @@
         virtualPreassureMark();
         //-------------------------------------------weather values------------------------------------------------------------
 
+        var delta;
         var tempForecast;
         var downfallForecast;
         var month = date.getMonth() + 1;
@@ -100,7 +101,7 @@
 
         var initValues = setTimeout(function () {
 
-            var delta = barometer_value - applicationData.values["virtualMarkValue"];
+            delta = barometer_value - applicationData.values["virtualMarkValue"];
             var difference = delta;
             if (delta < 0) {
                 delta += delta * 2;
