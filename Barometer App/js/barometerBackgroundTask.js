@@ -46,7 +46,7 @@
             applicationData = Windows.Storage.ApplicationData.current.localSettings;
         var resourceLoader = new Windows.ApplicationModel.Resources.ResourceLoader();
 
-        if (taskActionDetail == "clear") {
+        if (taskActionDetail === "clear") {
             applicationData.values.remove("virtualMarkTime");
         }
 
@@ -256,7 +256,7 @@
         //-------------------------------------------ALERT----------------------------------------------------
         if (applicationData.values["showNotifications"]) {
 
-            if (applicationData.values["dirrerence"] && applicationData.values["dirrerence"] != 10) {
+            if (applicationData.values["dirrerence"] && applicationData.values["dirrerence"] !== 10) {
                 settingsDifference = applicationData.values["dirrerence"];
             }
             if (delta >= settingsDifference) {
