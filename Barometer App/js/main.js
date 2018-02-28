@@ -286,7 +286,6 @@ jQuery(document).ready(function () {
 
                 jQuery("#lighting").css({ "boxShadow": "inset 0px 0px 5px 1px" + light_color, "transition": "all linear 1.5s" });
                 jQuery(".page_2_mark span:last-of-type").css({ "color": light_color });
-                applicationData.values["lighting_color"] = jQuery("#lighting_color").val();
                 rotation(jQuery("#days"), -(mark_day * 11.25), 3, 3);
                 rotation(jQuery("#months"), -27.6923 - (mark_month * 27.6923), 3, 3);
                 rotation(jQuery("#hours"), -14.4 - (mark_hours * 14.4), 3, 3);
@@ -320,19 +319,22 @@ jQuery(document).ready(function () {
             if (applicationData.values["background_color"]) {
                 jQuery("body").attr("style", "background: " + applicationData.values["background_color"] + " !important");
                 jQuery("#background_color").val(applicationData.values["background_color"]);
+            };
+            if (!applicationData.values["lighting_color"]){
+                applicationData.values["lighting_color"] = light_color;
             }
-            if (applicationData.values["lighting_color"]) {
+            else {
                 jQuery("#statistic_arrow").css({ "borderBottomColor": applicationData.values["lighting_color"] });
                 jQuery(".page_2_mark span:last-of-type").attr("style", "color: " + applicationData.values["lighting_color"] + " !important");
                 jQuery(".page_2_forecast span").attr("style", "color: " + applicationData.values["lighting_color"] + " !important");
                 jQuery("#lighting_color").val(applicationData.values["lighting_color"]);
                 light_color = applicationData.values["lighting_color"];
-            }
+            };
 
             if (applicationData.values["shadows"]) {
                 jQuery("#shadows").prop({ 'checked': true });
                 jQuery("#button").css({ "filter": "drop-shadow(10px 10px 3px rgba(0, 0, 0, .25))" });
-            }
+            };
 
             if (applicationData.values["mark_day"]) {
                 storage_day = applicationData.values["mark_day"];
@@ -349,13 +351,13 @@ jQuery(document).ready(function () {
                 rotation(jQuery("#minutes"), -5.9016 - (storage_minute * 5.9016), 0, 3);
                 rotation(jQuery("#statistic_arrow"), ((storage_preasure - 1010) * 2.43), 0, 3);
                 jQuery("#statistic_arrow").css({ "opacity": "1" });
-            }
+            };
             if (applicationData.values["dirrerence"]){
                 jQuery("#defference").val(applicationData.values["dirrerence"]);
-            }
+            };
             if (applicationData.values["interval"]){
                 jQuery("#interval").val(applicationData.values["interval"]);
-            }
+            };
         };
         this.details = function () {
             storage_day = applicationData.values["mark_day"];
