@@ -474,7 +474,6 @@ jQuery(document).ready(function () {
             var task1 = iter1.current.value;
             if (task1.name === exampleTaskName) {
                 taskRegistered = true;
-                jQuery(".page_2_forecast span:last-of-type").html("was registered interval=" + triggerInterval);
                 break;
             }
             iter1.moveNext();
@@ -487,7 +486,6 @@ jQuery(document).ready(function () {
                 builder.setTrigger(trigger);
                 var task = builder.register();
                 taskRegistered = true;
-                jQuery(".page_2_forecast span:last-of-type").html("now registered interval=" + triggerInterval);
             });
         }
     };
