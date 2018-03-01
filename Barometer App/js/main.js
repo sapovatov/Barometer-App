@@ -196,7 +196,7 @@ jQuery(document).ready(function () {
         else if (jQuery(this).val() < Number(jQuery(this).attr("min"))) {
             jQuery(this).val(jQuery(this).attr("min"));
         }
-        applicationData.values["dirrerence"] = jQuery(this).val();
+        applicationData.values["difference"] = jQuery(this).val();
     });
     jQuery("#interval").on("change", function () {
         applicationData.values["interval"] = jQuery(this).val();
@@ -352,7 +352,7 @@ jQuery(document).ready(function () {
                 jQuery("#statistic_arrow").css({ "opacity": "1" });
             };
             if (applicationData.values["dirrerence"]){
-                jQuery("#defference").val(applicationData.values["dirrerence"]);
+                jQuery("#defference").val(applicationData.values["difference"]);
             };
             if (applicationData.values["interval"]){
                 jQuery("#interval").val(applicationData.values["interval"]);

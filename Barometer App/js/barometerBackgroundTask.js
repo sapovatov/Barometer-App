@@ -256,8 +256,8 @@
         //-------------------------------------------ALERT----------------------------------------------------
         if (applicationData.values["showNotifications"]) {
 
-            if (applicationData.values["dirrerence"] && applicationData.values["dirrerence"] !== 10) {
-                settingsDifference = applicationData.values["dirrerence"];
+            if (applicationData.values["difference"] && applicationData.values["difference"] !== 10) {
+                settingsDifference = applicationData.values["difference"];
             }
             if (delta >= settingsDifference) {
                 setTimeout(function () {
