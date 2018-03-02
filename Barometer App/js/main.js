@@ -351,7 +351,7 @@ jQuery(document).ready(function () {
                 rotation(jQuery("#statistic_arrow"), ((storage_preasure - 1010) * 2.43), 0, 3);
                 jQuery("#statistic_arrow").css({ "opacity": "1" });
             };
-            if (applicationData.values["dirrerence"]){
+            if (applicationData.values["difference"]){
                 jQuery("#defference").val(applicationData.values["difference"]);
             };
             if (applicationData.values["interval"]){

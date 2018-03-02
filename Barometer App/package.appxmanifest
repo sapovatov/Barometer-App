@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" xmlns:iot="http://schemas.microsoft.com/appx/manifest/iot/windows10" IgnorableNamespaces="uap mp iot">
-  <Identity Name="f8e2033c-72a2-42e8-9e23-4967d7986ac4" Version="2.1803.201.0" Publisher="CN=Alexey" />
+  <Identity Name="f8e2033c-72a2-42e8-9e23-4967d7986ac4" Version="2.1803.202.0" Publisher="CN=Alexey" />
   <mp:PhoneIdentity PhoneProductId="f8e2033c-72a2-42e8-9e23-4967d7986ac4" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>ms-resource:barometer</DisplayName>
