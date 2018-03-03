@@ -256,11 +256,12 @@
         //-------------------------------------------ALERT----------------------------------------------------
         if (applicationData.values["showNotifications"]) {
 
-            if (applicationData.values["difference"] && applicationData.values["difference"] !== 10) {
+            if (applicationData.values["difference"] && applicationData.values["difference"] != 10) {
                 settingsDifference = applicationData.values["difference"];
             }
-            if (delta >= settingsDifference) {
-                setTimeout(function () {
+            
+            setTimeout(function () {
+                if (delta >= settingsDifference) {
                     //-------------------------------------------BADGE----------------------------------------------------
 
                     var badgeContent = new notifLib.BadgeNumericContent();
@@ -286,11 +287,11 @@
                     toastBindingGeneric.children.push(adaptiveText1);
 
                     adaptiveText1 = new notifLib1.AdaptiveText();
-                    adaptiveText1.text = tempForecast;
+                    adaptiveText1.text = downfallForecast;
                     toastBindingGeneric.children.push(adaptiveText1);
 
                     adaptiveText1 = new notifLib1.AdaptiveText();
-                    adaptiveText1.text = downfallForecast;
+                    adaptiveText1.text = tempForecast;
                     toastBindingGeneric.children.push(adaptiveText1);
 
                     toastVisual.bindingGeneric = toastBindingGeneric;
@@ -319,8 +320,8 @@
                     //
                     key = backgroundTaskInstance.task.taskId.toString();
                     applicationData.values[key] = "Succeeded";
-                },300)
-            }
+                }
+            }, 300)
         }
         //
         // A JavaScript background task must call close when it is done.
