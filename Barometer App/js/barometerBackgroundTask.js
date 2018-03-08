@@ -104,7 +104,7 @@
             delta = barometer_value - applicationData.values["virtualMarkValue"];
             var difference = delta;
             if (delta < 0) {
-                delta += delta * 2;
+                delta = -delta;
             }
 
             if (difference > 0) {
